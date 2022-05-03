@@ -6,12 +6,17 @@
 \usepackage{indentfirst}
 \usepackage{hyperref}
 \usepackage{tikz}
+\usepackage{graphicx}
+
+\graphicspath{ {./images/} }
 
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 
 \def\console #1{\begingroup\fontfamily{qcr}\selectfont#1\endgroup}
 \newenvironment{multiconsole}{\begingroup\fontfamily{qcr}\selectfont}{\endgroup}
+
+
 
 \title{\Huge JavaGridGraph - Dokumentacja}
 \author{Skoczek Mateusz, Jędrzejewski Sebastian}
@@ -80,7 +85,22 @@
 
     \begin{itemize}
         \item spójność grafu
-        \item najkrótsze ścieżki od wybranego wierzchołka A do wybranych wierzchołków $B_n$
+        \item najkrótsze ścieżki od wybranego wierzchołka $A$ do wybranych wierzchołków $B_n$
     \end{itemize}
 
+
+
+
+    \newpage
+    \section{Opis interfejsu programu}
+
+    \subsection{Widok startowy}
+
+    \includegraphics[width=\textwidth]{view1.png}
+
+    \begin{enumerate}
+        \item Wynik sprawdzenia spójności grafu. W przypadku gdy graf nie został wczytany, zostanie pokazana informacja o tym że graf nie został wczytany.
+        \item Przycisk "Open" otwiera systemowe okno wyboru pliku w celu wybrania pliku zawierającego graf
+        \item Przycisk "New" otwiera okno generowania grafu. Więcej informacji w punkcie "Okno generowania grafu".
+    \end{enumerate}
 \end{document}
