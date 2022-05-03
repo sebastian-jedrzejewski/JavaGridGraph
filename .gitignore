@@ -2,3 +2,9 @@
 *.class
 *.jar
 *.log
+
+
+Documentation/*
+
+!Documentation/*.tex
+!Documentation/*.pdf
