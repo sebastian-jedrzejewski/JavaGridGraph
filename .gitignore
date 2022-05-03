@@ -8,3 +8,4 @@ Documentation/*
 
 !Documentation/*.tex
 !Documentation/*.pdf
+!Documentation/images/
