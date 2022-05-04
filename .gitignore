@@ -2,6 +2,8 @@
 *.class
 *.jar
 *.log
+*.iml
+.*/
 
 
 Documentation/*
