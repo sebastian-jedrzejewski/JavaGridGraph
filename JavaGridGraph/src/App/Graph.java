@@ -18,4 +18,19 @@ public class Graph {
             this.vertices[i] = new Vertex(i);
         }
     }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public Vertex getVertex(int i) {
+        if(i >= rows*columns) {
+            throw new IllegalArgumentException();
+        }
+        return vertices[i];
+    }
 }
