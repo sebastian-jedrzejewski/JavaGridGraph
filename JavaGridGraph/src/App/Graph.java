@@ -1,6 +1,8 @@
 package App;
 
-public class Graph {
+import java.util.Iterator;
+
+public class Graph implements Iterable<Vertex> {
     private int rows;
     private int columns;
     private Vertex [] vertices;
@@ -28,9 +30,37 @@ public class Graph {
     }
 
     public Vertex getVertex(int i) {
-        if(i >= rows*columns) {
-            throw new IllegalArgumentException();
+        if(i < 0 || i >= rows*columns) {
+            throw new IllegalArgumentException("Invalid index of vertex");
         }
         return vertices[i];
+    }
+
+    @Override
+    public Iterator<Vertex> iterator() {
+        return new VertexIterator();
+    }
+
+    class VertexIterator implements Iterator<Vertex> {
+
+        private Vertex [] v;
+        private int lgt;
+        private int current;
+
+        public VertexIterator() {
+            v = vertices;
+            lgt = rows * columns;
+            current = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current < lgt;
+        }
+
+        @Override
+        public Vertex next() {
+            return v[current++];
+        }
     }
 }

@@ -44,17 +44,25 @@ public class Vertex {
     }
 
     public int getNeighbourNumber(int i) {
-        if(i >= neighbours.size()) {
-            throw new IllegalArgumentException();
+        if(i < 0 || i >= neighbours.size()) {
+            throw new IllegalArgumentException("Invalid index of neighbour");
         }
         return neighbours.get(i).n;
     }
 
     public double getNeighbourWeight(int i) {
-        if(i >= neighbours.size()) {
-            throw new IllegalArgumentException();
+        if(i < 0 || i >= neighbours.size()) {
+            throw new IllegalArgumentException("Invalid index of neighbour");
         }
         return neighbours.get(i).weight;
+    }
+
+    public boolean hasNeighbourNumber(int n) {
+        for(Neighbour neighbour: neighbours) {
+            if(neighbour.n == n)
+                return true;
+        }
+        return false;
     }
 
     public void addNeighbour(int n, double w) {
