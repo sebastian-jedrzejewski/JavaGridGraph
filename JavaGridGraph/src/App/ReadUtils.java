@@ -56,7 +56,7 @@ public class ReadUtils {
         }
     }
 
-    private static void displayGraph(Graph graph) { // method for tests
+    public static void displayGraph(Graph graph) { // method for tests
         for(Vertex v: graph) {
             System.out.println("Vertex number " + v.getNumber() + ":");
             for(int i = 0; i < v.getNumberOfNeighbours(); i++) {

@@ -69,7 +69,7 @@ public class Vertex {
         neighbours.add(new Neighbour(n, w));
     }
 
-    class Neighbour {
+    static class Neighbour {
         int n;
         double weight;
 

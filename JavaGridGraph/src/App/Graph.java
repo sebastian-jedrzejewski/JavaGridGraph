@@ -43,8 +43,8 @@ public class Graph implements Iterable<Vertex> {
 
     class VertexIterator implements Iterator<Vertex> {
 
-        private Vertex [] v;
-        private int lgt;
+        private final Vertex [] v;
+        private final int lgt;
         private int current;
 
         public VertexIterator() {
