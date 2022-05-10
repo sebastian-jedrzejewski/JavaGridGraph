@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Vertex {
     private int number;
-    private int d; // distance from source vertex
+    private double d; // distance from source vertex
     private int p; // predecessor in the shortest path
     private ArrayList<Neighbour> neighbours;
 
@@ -23,7 +23,7 @@ public class Vertex {
         return number;
     }
 
-    public int getD() {
+    public double getD() {
         return d;
     }
 
@@ -31,7 +31,7 @@ public class Vertex {
         return p;
     }
 
-    public void setD(int d) {
+    public void setD(double d) {
         this.d = d;
     }
 
