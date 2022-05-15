@@ -1,36 +1,56 @@
 package App;
 
+import GUI.GraphDrawer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        /* Code to test if drawing a graph works properly
-        Graph graph = ReadUtils.readGraph("JavaGridGraph/src/App/test.txt");
+        BorderPane mainPane = new BorderPane();
+        Scene scene = new Scene(mainPane, 1000, 1000);
         primaryStage.setTitle("JavaGridGraph");
-
-
-        BorderPane border = new BorderPane();
-        Scene scene = new Scene(border,1280,700);
-        GraphDrawer graphDrawer = new GraphDrawer(graph, scene.getWidth(), scene.getHeight(), 30, 0, 1);
-        AnchorPane anchorPane = graphDrawer.drawGraph();
-
-
-        border.setCenter(anchorPane);
-        BorderPane.setMargin(anchorPane, new Insets(10));
         primaryStage.setScene(scene);
-        */
+
+        BorderPane appbarPane = new BorderPane();
+        mainPane.setTop(appbarPane);
+
+        Label connectivityLabel = new Label("Connectivity: Unknown (Graph not loaded)");
+        connectivityLabel.setAlignment(Pos.CENTER_LEFT);
+        appbarPane.setLeft(connectivityLabel);
+
+        HBox buttonsBox = new HBox(8);
+        buttonsBox.setAlignment(Pos.CENTER_RIGHT);
+        appbarPane.setRight(buttonsBox);
+
+        Button resetGraphDrawerButton = new Button("Reset");
+        buttonsBox.getChildren().add(resetGraphDrawerButton);
+
+        Separator buttonsSeparator = new Separator(Orientation.VERTICAL);
+        buttonsBox.getChildren().add(buttonsSeparator);
+
+        Button loadGraphButton = new Button("Load");
+        buttonsBox.getChildren().add(loadGraphButton);
+
+        Button newGraphButton = new Button("New");
+        buttonsBox.getChildren().add(newGraphButton);
 
 
-//        Label label = new Label("Hello World");
-//        label.setPadding(new Insets(10));
+        Graph graph = ReadUtils.readGraph("D:\\OneDrive - Politechnika Warszawska\\S2\\JIMP2\\Projekt - Java\\JavaGridGraph\\src\\App\\mygraph");
+        GraphDrawer graphDrawer = new GraphDrawer(new Insets(10));
+
+        mainPane.setCenter(graphDrawer);
+
+        graphDrawer.setGraph(graph);
 
         primaryStage.show();
     }

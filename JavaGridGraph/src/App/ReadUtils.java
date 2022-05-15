@@ -28,10 +28,13 @@ public class ReadUtils {
                 }
             }
             else {
-                if(parts.length % 2 != 0) { // there should be odd number of elements (pair of vertices and weights + nothing at index 0)
+                System.out.println(parts.length);
+                if(parts.length % 2 != 0)
+                { // there should be odd number of elements (pair of vertices and weights + nothing at index 0)
                     addNeighbours(graph, parts, lineNumber);
                 }
-                else {
+                else
+                {
                     throw new IOException("Invalid format of the file");
                 }
             }

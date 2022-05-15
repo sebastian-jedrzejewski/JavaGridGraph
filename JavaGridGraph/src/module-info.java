@@ -5,5 +5,6 @@ module JavaGridGraph {
     requires javafx.fxml;
 
     opens App;
+    opens GUI;
 
 }

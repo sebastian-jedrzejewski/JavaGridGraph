@@ -8,10 +8,6 @@ public class Vertex {
     private int p; // predecessor in the shortest path
     private ArrayList<Neighbour> neighbours;
 
-    public Vertex() {
-
-    }
-
     public Vertex(int n) {
         this.number = n;
         this.d = Integer.MAX_VALUE;
@@ -48,6 +44,17 @@ public class Vertex {
             throw new IllegalArgumentException("Invalid index of neighbour");
         }
         return neighbours.get(i).n;
+    }
+
+    public int getNeighbourIndex(int n) {
+        for (int i = 0; i < neighbours.size(); i++)
+        {
+            if (neighbours.get(i).n == n)
+            {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("Invalid number of neighbour");
     }
 
     public double getNeighbourWeight(int i) {

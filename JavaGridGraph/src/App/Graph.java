@@ -7,10 +7,6 @@ public class Graph implements Iterable<Vertex> {
     private int columns;
     private Vertex [] vertices;
 
-    public Graph() {
-
-    }
-
     public Graph(int r, int c) {
         this.rows = r;
         this.columns = c;
