@@ -46,7 +46,7 @@ public class App extends Application {
 
 
         Graph graph = ReadUtils.readGraph("D:\\OneDrive - Politechnika Warszawska\\S2\\JIMP2\\Projekt - Java\\JavaGridGraph\\src\\App\\mygraph");
-        GraphDrawer graphDrawer = new GraphDrawer(new Insets(10));
+        GraphDrawer graphDrawer = new GraphDrawer(new Insets(10, 10, 35, 10));
 
         mainPane.setCenter(graphDrawer);
 
