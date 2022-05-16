@@ -45,7 +45,7 @@ public class App extends Application {
         buttonsBox.getChildren().add(newGraphButton);
 
 
-        Graph graph = ReadUtils.readGraph("D:\\OneDrive - Politechnika Warszawska\\S2\\JIMP2\\Projekt - Java\\JavaGridGraph\\src\\App\\mygraph");
+        Graph graph = ReadUtils.readGraph("D:\\OneDrive - Politechnika Warszawska\\S2\\JIMP2\\Projekt - Java\\JavaGridGraph\\src\\App\\javatest");
         GraphDrawer graphDrawer = new GraphDrawer(new Insets(10, 10, 35, 10));
 
         mainPane.setCenter(graphDrawer);
