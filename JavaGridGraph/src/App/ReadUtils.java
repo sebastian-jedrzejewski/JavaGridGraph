@@ -29,7 +29,7 @@ public class ReadUtils {
             }
             else {
                 System.out.println(parts.length);
-                if(parts.length % 2 != 0)
+                if(parts.length % 2 != 0 || parts.length == 0)
                 { // there should be odd number of elements (pair of vertices and weights + nothing at index 0)
                     addNeighbours(graph, parts, lineNumber);
                 }
