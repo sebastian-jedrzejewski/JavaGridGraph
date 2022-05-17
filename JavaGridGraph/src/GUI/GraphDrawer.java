@@ -192,7 +192,6 @@ public class GraphDrawer extends AnchorPane
                         else
                         {
                             toVerticesNumbers.add(vertex_number);
-                            dijkstra.dijkstraAlgorithm(fromVertexNumber, vertex_number);
                         }
                         update();
                     }
@@ -255,17 +254,20 @@ public class GraphDrawer extends AnchorPane
 
         if (fromVertexNumber != -1)
         {
+            System.out.println(fromVertexNumber);
             for (Integer vertex: toVerticesNumbers)
             {
-                do
+                dijkstra.dijkstraAlgorithm(fromVertexNumber, vertex);
+
+                Vertex v = _graph.getVertex(vertex);
+                while (v.getP() != -1)
                 {
-                    Vertex v = _graph.getVertex(vertex);
                     System.out.println(v.getP());
-                    Arrow edge = edges[v.getP()].getByNumber(vertex);
+                    Arrow edge = edges[v.getP()].getByNumber(v.getNumber());
                     edge.setFill(Color.WHITE);
                     edge.setWidth(3);
-                    vertex = v.getP();
-                } while (vertex != fromVertexNumber);
+                    v = _graph.getVertex(v.getP());
+                }
             }
         }
 
