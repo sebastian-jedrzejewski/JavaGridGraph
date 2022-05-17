@@ -117,6 +117,7 @@ public class Arrow extends Group
     {
         line.setStrokeWidth(width);
     }
+    public final void setRadius(double width) { circle.setRadius(width); }
 
     //endregion
 }

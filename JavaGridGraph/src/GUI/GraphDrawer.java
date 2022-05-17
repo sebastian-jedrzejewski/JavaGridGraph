@@ -32,7 +32,12 @@ public class GraphDrawer extends AnchorPane
 
     private Insets _margin = new Insets(0);
     private double _verticesSpacingPercent = 0.8;
-    private double _edgesSpacing = 4;
+    private double _edgesSpacingPercent = 0.1;
+    private double _edgesNormalWidthPercent = 0.05;
+    private double _edgesSelectedWidthPercent = 0.1;
+    private double _edgesNormalRadiusPercent = 0.1;
+    private double _edgesSelectedRadiusPercent = 0.15;
+
 
     private Dijkstra dijkstra = null;
     private int fromVertexNumber = -1;
@@ -206,29 +211,29 @@ public class GraphDrawer extends AnchorPane
             {
                 double startX = x - (diameter / 2);
                 double endX = startX - (diameter * _verticesSpacingPercent);
-                double Y = y + (_edgesSpacing / 2);
-                edges[vertex_number].setLeft(i - 1, drawEdge(startX, Y, endX, Y, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - 1))));
+                double Y = y + (_edgesSpacingPercent * diameter);
+                edges[vertex_number].setLeft(i - 1, drawEdge(startX, Y, endX, Y, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - 1)), diameter));
             }
             if (vertex.hasNeighbourNumber(i + 1)) // Right
             {
                 double startX = x + (diameter / 2);
                 double endX = startX + (diameter * _verticesSpacingPercent);
-                double Y = y - (_edgesSpacing / 2);
-                edges[vertex_number].setRight(i + 1, drawEdge(startX, Y, endX, Y, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + 1))));
+                double Y = y - (_edgesSpacingPercent * diameter);
+                edges[vertex_number].setRight(i + 1, drawEdge(startX, Y, endX, Y, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + 1)), diameter));
             }
             if (vertex.hasNeighbourNumber(i - columns)) // Top
             {
                 double startY = y - (diameter / 2);
                 double endY = startY - (diameter * _verticesSpacingPercent);
-                double X = x - (_edgesSpacing / 2);
-                edges[vertex_number].setTop(i - columns, drawEdge(X, startY, X, endY, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - columns))));
+                double X = x - (_edgesSpacingPercent * diameter);
+                edges[vertex_number].setTop(i - columns, drawEdge(X, startY, X, endY, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - columns)), diameter));
             }
             if (vertex.hasNeighbourNumber(i + columns)) // Bottom
             {
                 double startY = y + (diameter / 2);
                 double endY = startY + (diameter * _verticesSpacingPercent);
-                double X = x + (_edgesSpacing / 2);
-                edges[vertex_number].setBottom(i + columns, drawEdge(X, startY, X, endY, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + columns))));
+                double X = x + (_edgesSpacingPercent * diameter);
+                edges[vertex_number].setBottom(i + columns, drawEdge(X, startY, X, endY, vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + columns)), diameter));
             }
 
             if (((i + 1) % columns) == 0)
@@ -265,7 +270,8 @@ public class GraphDrawer extends AnchorPane
                     System.out.println(v.getP());
                     Arrow edge = edges[v.getP()].getByNumber(v.getNumber());
                     edge.setFill(Color.WHITE);
-                    edge.setWidth(3);
+                    edge.setWidth(diameter * _edgesSelectedWidthPercent);
+                    edge.setRadius(diameter * _edgesSelectedRadiusPercent);
                     v = _graph.getVertex(v.getP());
                 }
             }
@@ -314,13 +320,15 @@ public class GraphDrawer extends AnchorPane
         return color;
     }
 
-    private Arrow drawEdge(double startX, double startY, double endX, double endY, double weight)
+    private Arrow drawEdge(double startX, double startY, double endX, double endY, double weight, double baseWidth)
     {
         Arrow edge = new Arrow();
         edge.setStartX(startX);
         edge.setStartY(startY);
         edge.setEndX(endX);
         edge.setEndY(endY);
+        edge.setWidth(baseWidth * _edgesNormalWidthPercent);
+        edge.setRadius(baseWidth * _edgesNormalRadiusPercent);
         edge.setFill(Color.web("hsl(" + (255 - (((weight - _minGraphsWeight) / (_maxGraphsWeight - _minGraphsWeight)) * 255)) + ", 100%, 100%)"));
         return edge;
     }

@@ -1,13 +1,14 @@
 package App;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class ReadUtils {
 
-    public static Graph readGraph(String path) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(path));
+    public static Graph readGraph(File file) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(file));
         int lineNumber = 0;
         String line;
         String [] parts; // split the line into this array
