@@ -3,9 +3,9 @@ package App;
 import java.util.Iterator;
 
 public class Graph implements Iterable<Vertex> {
-    private int rows;
-    private int columns;
-    private Vertex [] vertices;
+    private final int rows;
+    private final int columns;
+    private final Vertex [] vertices;
 
     public Graph(int r, int c) {
         this.rows = r;
@@ -30,6 +30,13 @@ public class Graph implements Iterable<Vertex> {
             throw new IllegalArgumentException("Invalid index of vertex");
         }
         return vertices[i];
+    }
+
+    public void refresh() {
+        for(int i=0; i < rows*columns; i++) {
+            vertices[i].setP(-1);
+            vertices[i].setD(Double.MAX_VALUE);
+        }
     }
 
     @Override

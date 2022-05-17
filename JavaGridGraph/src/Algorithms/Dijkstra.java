@@ -12,6 +12,8 @@ public class Dijkstra {
     }
 
     public void dijkstraAlgorithm(int vA, int vB) {
+        graph.refresh();
+
         Vertex vertexA = graph.getVertex(vA);
         Vertex vertexB = graph.getVertex(vB);
         int n = graph.getColumns() * graph.getRows();

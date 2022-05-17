@@ -3,14 +3,14 @@ package App;
 import java.util.ArrayList;
 
 public class Vertex {
-    private int number;
+    private final int number;
     private double d; // distance from source vertex
     private int p; // predecessor in the shortest path
-    private ArrayList<Neighbour> neighbours;
+    private final ArrayList<Neighbour> neighbours;
 
     public Vertex(int n) {
         this.number = n;
-        this.d = Integer.MAX_VALUE;
+        this.d = Double.MAX_VALUE;
         this.p = -1;
         this.neighbours = new ArrayList<>();
     }
