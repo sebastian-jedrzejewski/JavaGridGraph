@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -66,14 +67,33 @@ public class App extends Application {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Open graph file");
                 File file = fileChooser.showOpenDialog(primaryStage);
-                try
+                if (file != null)
                 {
-                    Graph graph = ReadUtils.readGraph(file);
-                    graphDrawer.setGraph(graph);
+                    try
+                    {
+                        Graph graph = ReadUtils.readGraph(file);
+                        graphDrawer.setGraph(graph);
+                    }
+                    catch (IOException e)
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("ERROR");
+                        alert.setHeaderText("Graph loading error");
+                        alert.setContentText("Wrong data format");
+                        alert.show();
+                    }
                 }
-                catch (IOException e)
+            }
+        });
+
+        resetGraphDrawerButton.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle(ActionEvent actionEvent)
+            {
+                if (graphDrawer.getGraph() != null)
                 {
-                    System.out.println("niedziała");
+                    graphDrawer.reset();
                 }
             }
         });

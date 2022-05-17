@@ -32,11 +32,11 @@ public class GraphDrawer extends AnchorPane
 
     private Insets _margin = new Insets(0);
     private double _verticesSpacingPercent = 0.8;
-    private double _edgesSpacingPercent = 0.1;
-    private double _edgesNormalWidthPercent = 0.05;
-    private double _edgesSelectedWidthPercent = 0.1;
-    private double _edgesNormalRadiusPercent = 0.1;
-    private double _edgesSelectedRadiusPercent = 0.15;
+    private final double _edgesSpacingPercent = 0.1;
+    private final double _edgesNormalWidthPercent = 0.05;
+    private final double _edgesSelectedWidthPercent = 0.1;
+    private final double _edgesNormalRadiusPercent = 0.1;
+    private final double _edgesSelectedRadiusPercent = 0.15;
 
 
     private Dijkstra dijkstra = null;
