@@ -1,7 +1,7 @@
 package App.Controls;
 
-import Core.GraphAlgorithms.Dijkstra;
 import Core.Graph;
+import Core.GraphAlgorithms.Dijkstra;
 import Core.Vertex;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;

@@ -1,13 +1,12 @@
-package Core;
+package Core.Utils;
 
+import Core.Graph;
 import Core.Helpers.Range;
+import Core.Vertex;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.random.RandomGenerator;
 
 public class GraphUtils
 {

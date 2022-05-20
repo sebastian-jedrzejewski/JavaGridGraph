@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class Graph implements Iterable<Vertex> {
     private final int rows;
     private final int columns;
-    private final Vertex [] vertices;
+    private final Vertex[] vertices;
 
     public Graph(int r, int c) {
         this.rows = r;
@@ -46,7 +46,7 @@ public class Graph implements Iterable<Vertex> {
 
     class VertexIterator implements Iterator<Vertex> {
 
-        private final Vertex [] v;
+        private final Vertex[] v;
         private final int lgt;
         private int current;
 
