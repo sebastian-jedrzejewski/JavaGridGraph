@@ -1,4 +1,6 @@
-package Core;
+package Core.Helpers;
+
+import Core.Vertex;
 
 public class PriorityQueue {
     private final Vertex[] q; // array of vertices; priority is the smallest weight to reach the vertex from the source

@@ -3,6 +3,8 @@ package App.Views;
 import App.Controls.GraphDrawer;
 import Core.Graph;
 import Core.GraphAlgorithms.BFS;
+import Core.GraphUtils;
+import Core.Helpers.Range;
 import Core.ReadUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Main extends Scene
 {
@@ -67,6 +70,7 @@ public class Main extends Scene
         buttonsBox.getChildren().add(loadGraphButton);
 
         Button newGraphButton = new Button("New");
+        newGraphButton.setOnAction(new newGraphButtonClicked());
         buttonsBox.getChildren().add(newGraphButton);
 
         _graphDrawer = new GraphDrawer();
@@ -124,6 +128,23 @@ public class Main extends Scene
             if (_graphDrawer.getGraph() != null)
             {
                 _graphDrawer.reset();
+            }
+        }
+    }
+
+    private class newGraphButtonClicked implements EventHandler<ActionEvent>
+    {
+        @Override
+        public void handle(ActionEvent event)
+        {
+            Graph graph = GraphUtils.Generate(10, 10, new Random(), new Range<>(0.0,1.0), new Range<>(4, 4), new Range<>(4, 4));
+            try
+            {
+                GraphUtils.Write(graph, new File("D:/test"));
+            }
+            catch (IOException e)
+            {
+                System.out.println("pliktfu");
             }
         }
     }

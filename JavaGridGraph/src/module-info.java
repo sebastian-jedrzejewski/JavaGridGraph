@@ -9,4 +9,5 @@ module JavaGridGraph {
     opens App.Views;
     opens Core;
     opens Core.GraphAlgorithms;
+    opens Core.Helpers;
 }

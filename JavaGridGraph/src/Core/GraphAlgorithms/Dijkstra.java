@@ -1,7 +1,7 @@
 package Core.GraphAlgorithms;
 
 import Core.Graph;
-import Core.PriorityQueue;
+import Core.Helpers.PriorityQueue;
 import Core.Vertex;
 
 public class Dijkstra {
