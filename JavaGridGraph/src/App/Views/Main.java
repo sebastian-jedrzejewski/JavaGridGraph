@@ -5,7 +5,6 @@ import Core.Graph;
 import Core.GraphAlgorithms.BFS;
 import Core.GraphUtils;
 import Core.Helpers.Range;
-import Core.ReadUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -96,7 +95,7 @@ public class Main extends Scene
             {
                 try
                 {
-                    Graph graph = ReadUtils.readGraph(file);
+                    Graph graph = GraphUtils.read(file);
                     _graphDrawer.setGraph(graph);
                     BFS bfs = new BFS(graph);
                     if (bfs.isGraphConnected())
@@ -137,10 +136,10 @@ public class Main extends Scene
         @Override
         public void handle(ActionEvent event)
         {
-            Graph graph = GraphUtils.Generate(10, 10, new Random(), new Range<>(0.0,1.0), new Range<>(4, 4), new Range<>(4, 4));
+            Graph graph = GraphUtils.generate(10, 10, new Random(), new Range<>(0.0,1.0), new Range<>(4, 4), new Range<>(4, 4));
             try
             {
-                GraphUtils.Write(graph, new File("D:/test"));
+                GraphUtils.write(graph, new File("D:/test"));
             }
             catch (IOException e)
             {
