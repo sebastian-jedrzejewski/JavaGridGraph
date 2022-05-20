@@ -2,13 +2,13 @@ package App.Views;
 
 import App.Controls.GraphDrawer;
 import Core.Graph;
+import Core.GraphAlgorithms.BFS;
 import Core.ReadUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,11 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -29,6 +25,7 @@ public class Main extends Scene
     //region PROPERTIES
 
     private final GraphDrawer _graphDrawer;
+    private final Label _connectivityLabel;
 
     //endregion
 
@@ -50,9 +47,9 @@ public class Main extends Scene
         appbarPane.setPadding(new Insets(10));
         basePane.setTop(appbarPane);
 
-        Label connectivityLabel = new Label("Connectivity: Unknown (Graph not loaded)");
-        connectivityLabel.setAlignment(Pos.CENTER_LEFT);
-        appbarPane.setLeft(connectivityLabel);
+        _connectivityLabel = new Label("Connectivity: Unknown (Graph not loaded)");
+        _connectivityLabel.setAlignment(Pos.CENTER_LEFT);
+        appbarPane.setLeft(_connectivityLabel);
 
         HBox buttonsBox = new HBox(8);
         buttonsBox.setAlignment(Pos.CENTER_RIGHT);
@@ -97,6 +94,15 @@ public class Main extends Scene
                 {
                     Graph graph = ReadUtils.readGraph(file);
                     _graphDrawer.setGraph(graph);
+                    BFS bfs = new BFS(graph);
+                    if (bfs.isGraphConnected())
+                    {
+                        _connectivityLabel.setText("Connectivity: Connected");
+                    }
+                    else
+                    {
+                        _connectivityLabel.setText("Connectivity: Disconnected");
+                    }
                 }
                 catch (IOException e)
                 {
