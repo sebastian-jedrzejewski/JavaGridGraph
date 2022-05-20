@@ -5,6 +5,8 @@ module JavaGridGraph {
     requires javafx.fxml;
 
     opens App;
-    opens GUI;
-
+    opens App.Controls;
+    opens App.Views;
+    opens Core;
+    opens Core.GraphAlgorithms;
 }

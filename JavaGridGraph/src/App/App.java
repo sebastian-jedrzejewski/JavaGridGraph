@@ -1,6 +1,9 @@
 package App;
 
-import GUI.GraphDrawer;
+import App.Controls.GraphDrawer;
+import App.Views.Main;
+import Core.Graph;
+import Core.ReadUtils;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,80 +26,9 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        BorderPane mainPane = new BorderPane();
-        Scene scene = new Scene(mainPane, 1000, 1000);
         primaryStage.setTitle("JavaGridGraph");
-        primaryStage.setScene(scene);
-
-        BorderPane appbarPane = new BorderPane();
-        appbarPane.setPadding(new Insets(10));
-        mainPane.setTop(appbarPane);
-
-        Label connectivityLabel = new Label("Connectivity: Unknown (Graph not loaded)");
-        connectivityLabel.setAlignment(Pos.CENTER_LEFT);
-        appbarPane.setLeft(connectivityLabel);
-
-        HBox buttonsBox = new HBox(8);
-        buttonsBox.setAlignment(Pos.CENTER_RIGHT);
-        appbarPane.setRight(buttonsBox);
-
-        Button resetGraphDrawerButton = new Button("Reset");
-        buttonsBox.getChildren().add(resetGraphDrawerButton);
-
-        Separator buttonsSeparator = new Separator(Orientation.VERTICAL);
-        buttonsBox.getChildren().add(buttonsSeparator);
-
-        Button loadGraphButton = new Button("Load");
-
-        buttonsBox.getChildren().add(loadGraphButton);
-
-        Button newGraphButton = new Button("New");
-        buttonsBox.getChildren().add(newGraphButton);
-
-        GraphDrawer graphDrawer = new GraphDrawer(new Insets(10, 10, 55, 10));
-
-        mainPane.setCenter(graphDrawer);
-
+        primaryStage.setScene(new Main());
         primaryStage.show();
-
-        loadGraphButton.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent actionEvent)
-            {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Open graph file");
-                File file = fileChooser.showOpenDialog(primaryStage);
-                if (file != null)
-                {
-                    try
-                    {
-                        Graph graph = ReadUtils.readGraph(file);
-                        graphDrawer.setGraph(graph);
-                    }
-                    catch (IOException e)
-                    {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("Graph loading error");
-                        alert.setContentText("Wrong data format");
-                        alert.show();
-                    }
-                }
-            }
-        });
-
-        resetGraphDrawerButton.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent actionEvent)
-            {
-                if (graphDrawer.getGraph() != null)
-                {
-                    graphDrawer.reset();
-                }
-            }
-        });
     }
 
     public static void main(String[] args)

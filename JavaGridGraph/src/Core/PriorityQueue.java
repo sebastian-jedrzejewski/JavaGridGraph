@@ -1,7 +1,7 @@
-package App;
+package Core;
 
 public class PriorityQueue {
-    private final Vertex [] q; // array of vertices; priority is the smallest weight to reach the vertex from the source
+    private final Vertex[] q; // array of vertices; priority is the smallest weight to reach the vertex from the source
     private final int [] pn; // positions of vertices in q
     private int n; // number of elements in q
 

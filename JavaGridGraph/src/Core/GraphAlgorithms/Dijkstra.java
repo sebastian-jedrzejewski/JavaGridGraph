@@ -1,8 +1,8 @@
-package Algorithms;
+package Core.GraphAlgorithms;
 
-import App.Graph;
-import App.PriorityQueue;
-import App.Vertex;
+import Core.Graph;
+import Core.PriorityQueue;
+import Core.Vertex;
 
 public class Dijkstra {
     private final Graph graph;
