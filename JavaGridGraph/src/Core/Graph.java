@@ -25,6 +25,20 @@ public class Graph implements Iterable<Vertex> {
         return columns;
     }
 
+    public int getNumberOfInputNeighbours(int number) {
+        int count = 0;
+        if(number % columns != 0 && vertices[number-1].hasNeighbourNumber(number))
+            count++;
+        if((number+1) % columns != 0 && vertices[number+1].hasNeighbourNumber(number))
+            count++;
+        if(number - columns >= 0 && vertices[number-columns].hasNeighbourNumber(number))
+            count++;
+        if(number+columns < vertices.length && vertices[number+columns].hasNeighbourNumber(number))
+            count++;
+
+        return count;
+    }
+
     public Vertex getVertex(int i) {
         if(i < 0 || i >= rows*columns) {
             throw new IllegalArgumentException("Invalid index of vertex");
