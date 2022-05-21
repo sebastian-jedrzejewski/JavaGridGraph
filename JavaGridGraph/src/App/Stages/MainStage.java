@@ -80,6 +80,29 @@ public class MainStage extends Stage
 
 
 
+    //region PUBLIC METHODS
+
+    public void setGraph(Graph graph)
+    {
+        if (graph != null)
+        {
+            _graphDrawer.setGraph(graph);
+            BFS bfs = new BFS(graph);
+            if (bfs.isGraphConnected())
+            {
+                _connectivityLabel.setText("Connectivity: Connected");
+            }
+            else
+            {
+                _connectivityLabel.setText("Connectivity: Disconnected");
+            }
+        }
+    }
+
+    //endregion
+
+
+
     //region EVENT HANDLERS
 
     private class loadGraphButtonClicked implements EventHandler<ActionEvent>
@@ -94,17 +117,7 @@ public class MainStage extends Stage
             {
                 try
                 {
-                    Graph graph = GraphUtils.read(file);
-                    _graphDrawer.setGraph(graph);
-                    BFS bfs = new BFS(graph);
-                    if (bfs.isGraphConnected())
-                    {
-                        _connectivityLabel.setText("Connectivity: Connected");
-                    }
-                    else
-                    {
-                        _connectivityLabel.setText("Connectivity: Disconnected");
-                    }
+                    setGraph(GraphUtils.read(file));
                 }
                 catch (IOException e)
                 {
@@ -135,8 +148,8 @@ public class MainStage extends Stage
         @Override
         public void handle(ActionEvent event)
         {
-            Stage newGraphStage = new NewGraphStage();
-            newGraphStage.show();
+            NewGraphStage newGraphStage = new NewGraphStage();
+            setGraph(newGraphStage.showAndWaitForGraph());
         }
     }
 

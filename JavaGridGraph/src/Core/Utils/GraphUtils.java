@@ -72,19 +72,19 @@ public class GraphUtils
         for (int i = 0; i < numberOfVertices; i++)
         {
             ArrayList<Integer> availableVertices = new ArrayList<>();
-            if (i % width != 0 && graph.getVertex(i - 1).getNumberOfNeighbours() < inputEdgeCountArray[i - 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - 1)))
+            if (i % width != 0 && graph.getNumberOfInputNeighbours(i - 1) < inputEdgeCountArray[i - 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - 1)))
             {
                 availableVertices.add(i - 1);
             }
-            if ((i + 1) % width != 0 && graph.getVertex(i + 1).getNumberOfNeighbours() < inputEdgeCountArray[i + 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + 1)))
+            if ((i + 1) % width != 0 && graph.getNumberOfInputNeighbours(i + 1) < inputEdgeCountArray[i + 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + 1)))
             {
                 availableVertices.add(i + 1);
             }
-            if (i - width >= 0 && graph.getVertex(i - width).getNumberOfNeighbours() < inputEdgeCountArray[i - width] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - width)))
+            if (i - width >= 0 && graph.getNumberOfInputNeighbours(i - width) < inputEdgeCountArray[i - width] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - width)))
             {
                 availableVertices.add(i - width);
             }
-            if (i + width < numberOfVertices && graph.getVertex(i + width).getNumberOfNeighbours() < inputEdgeCountArray[i + width] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + width)))
+            if (i + width < numberOfVertices && graph.getNumberOfInputNeighbours(i + width) < inputEdgeCountArray[i + width] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + width)))
             {
                 availableVertices.add(i + width);
             }

@@ -6,9 +6,14 @@ import javafx.scene.control.TextField;
 
 public class NumericTextField extends TextField
 {
+    //TODO: non positive integer and double
+
     //region PROPERTIES
 
     private final Type _type;
+
+    private double _minValue;
+    private double _maxValue;
 
     //endregion
 
@@ -24,7 +29,10 @@ public class NumericTextField extends TextField
     public NumericTextField(Type type, String text)
     {
         _type = type;
-        super.textProperty().addListener(new removeUnwantedChars());
+        _minValue = Double.NaN;
+        _maxValue = Double.NaN;
+
+        super.textProperty().addListener(new textChanged());
         super.setText(text);
     }
 
@@ -32,15 +40,44 @@ public class NumericTextField extends TextField
 
 
 
-    //region LISTENERS
+    //region PUBLIC METHODS
 
-    private class removeUnwantedChars implements ChangeListener<String>
+    public void setMinValue(double value)
+    {
+        _minValue = value;
+    }
+    public double getMinValue()
+    {
+        return _minValue;
+    }
+
+    public void setMaxValue(double value)
+    {
+        _maxValue = value;
+    }
+    public double getMaxValue()
+    {
+        return _maxValue;
+    }
+
+    //endregion
+
+
+
+    //region EVENT HANDLERS
+
+    private class textChanged implements ChangeListener<String>
     {
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue)
         {
-            newValue = newValue.replaceAll("[^[\\d|[.]]]", "");
-            StringBuilder text = new StringBuilder(newValue);
+            String copyValue = newValue;
+            if (!copyValue.isEmpty() && copyValue.charAt(0) == '-' && (_type == Type.Integer || _type == Type.Double))
+            {
+                copyValue = copyValue.substring(1);
+            }
+            copyValue = copyValue.replaceAll("[^[\\d|[.]]]", "");
+            StringBuilder text = new StringBuilder(copyValue);
             boolean dot = false;
             for (int i = 0; i < text.length(); i++)
             {
@@ -56,7 +93,36 @@ public class NumericTextField extends TextField
                     }
                 }
             }
-            NumericTextField.this.setText(text.toString());
+            copyValue = text.toString();
+            if (!newValue.isEmpty() && newValue.charAt(0) == '-' && (_type == Type.Integer || _type == Type.Double))
+            {
+                newValue = '-' + copyValue;
+            }
+            else
+            {
+                newValue = copyValue;
+            }
+
+            if ((!Double.isNaN(_minValue) || !Double.isNaN(_maxValue)) && !newValue.isEmpty())
+            {
+                if (_type == Type.PositiveDouble)
+                {
+                    double value = Double.parseDouble(newValue);
+                    if (_minValue > value || _maxValue < value)
+                    {
+                        newValue = oldValue;
+                    }
+                }
+                else
+                {
+                    int value = Integer.parseInt(newValue);
+                    if (_minValue > value || _maxValue < value)
+                    {
+                        newValue = oldValue;
+                    }
+                }
+            }
+            NumericTextField.this.setText(newValue);
         }
     }
 
@@ -69,7 +135,9 @@ public class NumericTextField extends TextField
     public enum Type
     {
         PositiveInteger,
+        Integer,
         PositiveDouble,
+        Double,
     }
 
     //endregion

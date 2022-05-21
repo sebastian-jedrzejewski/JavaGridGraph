@@ -85,34 +85,37 @@ public class GraphDrawer extends AnchorPane
     public Graph getGraph() { return _graph; }
     public void setGraph(Graph graph)
     {
-        _minGraphsWeight = Double.MAX_VALUE;
-        _maxGraphsWeight = 0;
-        _graph = graph;
-        dijkstra = new Dijkstra(_graph);
-
-        for (Vertex vertex: _graph)
-        {
-            for (int i = 0; i < vertex.getNumberOfNeighbours(); i++)
-            {
-                double weight = vertex.getNeighbourWeight(i);
-                if (weight > _maxGraphsWeight)
-                {
-                    _maxGraphsWeight = weight;
-                }
-                if (weight < _minGraphsWeight)
-                {
-                    _minGraphsWeight = weight;
-                }
-            }
-        }
-
         fromVertexNumber = -1;
         toVerticesNumbers = new ArrayList<>();
 
         this.getChildren().clear();
 
-        createVerticesAndEdges();
-        updatePosition();
+        if (graph != null)
+        {
+            _minGraphsWeight = Double.MAX_VALUE;
+            _maxGraphsWeight = 0;
+            _graph = graph;
+            dijkstra = new Dijkstra(_graph);
+
+            for (Vertex vertex: _graph)
+            {
+                for (int i = 0; i < vertex.getNumberOfNeighbours(); i++)
+                {
+                    double weight = vertex.getNeighbourWeight(i);
+                    if (weight > _maxGraphsWeight)
+                    {
+                        _maxGraphsWeight = weight;
+                    }
+                    if (weight < _minGraphsWeight)
+                    {
+                        _minGraphsWeight = weight;
+                    }
+                }
+            }
+
+            createVerticesAndEdges();
+            updatePosition();
+        }
     }
 
     public void reset()
