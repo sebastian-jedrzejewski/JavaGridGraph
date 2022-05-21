@@ -1,9 +1,8 @@
-package App.Views;
+package App.Stages;
 
 import App.Controls.GraphDrawer;
 import Core.Graph;
 import Core.GraphAlgorithms.BFS;
-import Core.Helpers.Range;
 import Core.Utils.GraphUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,11 +17,12 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
-public class Main extends Scene
+public class MainStage extends Stage
 {
     //region PROPERTIES
 
@@ -35,14 +35,10 @@ public class Main extends Scene
 
     //region CONSTRUCTORS
 
-    public Main()
+    public MainStage()
     {
-        this(new BorderPane());
-    }
-
-    private Main(BorderPane basePane)
-    {
-        super(basePane, 500, 500);
+        BorderPane basePane = new BorderPane();
+        Scene scene = new Scene(basePane, 500, 500);
 
         // Initialize view
         BorderPane appbarPane = new BorderPane();
@@ -75,6 +71,9 @@ public class Main extends Scene
         _graphDrawer = new GraphDrawer();
         _graphDrawer.setMargin(new Insets(10, 10, 55, 10));
         basePane.setCenter(_graphDrawer);
+
+        this.setTitle("JavaGridGraph");
+        this.setScene(scene);
     }
 
     //endregion
@@ -90,7 +89,7 @@ public class Main extends Scene
         {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open graph file");
-            File file = fileChooser.showOpenDialog(Main.this.getWindow());
+            File file = fileChooser.showOpenDialog(MainStage.this.getOwner());
             if (file != null)
             {
                 try
@@ -136,15 +135,8 @@ public class Main extends Scene
         @Override
         public void handle(ActionEvent event)
         {
-            Graph graph = GraphUtils.generate(10, 10, new Random(), new Range<>(0.0,1.0), new Range<>(4, 4), new Range<>(4, 4));
-            try
-            {
-                GraphUtils.write(graph, new File("D:/test"));
-            }
-            catch (IOException e)
-            {
-                System.out.println("pliktfu");
-            }
+            Stage newGraphStage = new NewGraphStage();
+            newGraphStage.show();
         }
     }
 

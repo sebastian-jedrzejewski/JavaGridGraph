@@ -6,7 +6,7 @@ module JavaGridGraph {
 
     opens App;
     opens App.Controls;
-    opens App.Views;
+    opens App.Stages;
     opens Core;
     opens Core.GraphAlgorithms;
     opens Core.Helpers;
