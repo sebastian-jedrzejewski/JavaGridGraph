@@ -72,14 +72,10 @@ public class GraphUtils
         for (int i = 0; i < numberOfVertices; i++)
         {
             ArrayList<Integer> availableVertices = new ArrayList<>();
-            System.out.println(width);
-            System.out.println(i);
-            System.out.println(i % width);
             if (i % width != 0 && graph.getNumberOfInputNeighbours(i - 1) < inputEdgeCountArray[i - 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - 1)))
             {
                 availableVertices.add(i - 1);
             }
-            System.out.println((i+1)%width);
             if ((i + 1) % width != 0 && graph.getNumberOfInputNeighbours(i + 1) < inputEdgeCountArray[i + 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + 1)))
             {
                 availableVertices.add(i + 1);
