@@ -33,18 +33,8 @@ public class BFS
 
     public boolean isGraphConnected()
     {
-        List<Result> nonNullResults = Arrays.stream(_results).filter(Objects::nonNull).toList();
-        Result result;
-        if (nonNullResults.size() > 0)
-        {
-            result = nonNullResults.get(0);
-        }
-        else
-        {
-            result = _results[0] = run(0);
-        }
-
-        for (boolean connectedVertex : result.Visited)
+        Graph underlyingGraph = GraphUtils.convertToUnderlying(_graph);
+        for (boolean connectedVertex : run(0, underlyingGraph).Visited)
         {
             if (!connectedVertex)
             {
@@ -62,7 +52,11 @@ public class BFS
 
     private Result run(int vertex)
     {
-        int numberOfVertices = _graph.getColumns() * _graph.getRows();
+        return run(vertex, _graph);
+    }
+    private Result run(int vertex, Graph graph)
+    {
+        int numberOfVertices = graph.getColumns() * graph.getRows();
 
         boolean[] visited = new boolean[numberOfVertices];
         int[] predecessors = new int[numberOfVertices];
@@ -81,7 +75,7 @@ public class BFS
         while (!(queue.isEmpty()))
         {
             currentVertex = queue.pop();
-            Vertex currentVertexObject = _graph.getVertex(currentVertex);
+            Vertex currentVertexObject = graph.getVertex(currentVertex);
             for (int i = 0; i < currentVertexObject.getNumberOfNeighbours(); i++)
             {
                 int neighbour = currentVertexObject.getNeighbourNumber(i);

@@ -10,5 +10,4 @@ module JavaGridGraph {
     opens Core;
     opens Core.GraphAlgorithms;
     opens Core.Helpers;
-    opens Core.Utils;
 }

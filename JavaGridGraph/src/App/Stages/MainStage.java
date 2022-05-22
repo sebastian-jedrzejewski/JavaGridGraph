@@ -3,7 +3,7 @@ package App.Stages;
 import App.Controls.GraphDrawer;
 import Core.Graph;
 import Core.GraphAlgorithms.BFS;
-import Core.Utils.GraphUtils;
+import Core.GraphAlgorithms.GraphUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

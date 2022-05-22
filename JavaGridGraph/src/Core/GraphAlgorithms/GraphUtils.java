@@ -1,4 +1,4 @@
-package Core.Utils;
+package Core.GraphAlgorithms;
 
 import Core.Graph;
 import Core.Helpers.Range;
@@ -170,6 +170,38 @@ public class GraphUtils
             lineNumber++;
         }
         return graph;
+    }
+
+    public static Graph convertToUnderlying(Graph graph)
+    {
+        int width = graph.getColumns();
+        int height = graph.getRows();
+        int numberOfVertices = width * height;
+        Graph underlyingGraph = new Graph(height, width);
+        for (int i = 0; i < numberOfVertices; i++)
+        {
+            if (i - 1 >= 0 && (graph.getVertex(i).hasNeighbourNumber(i - 1) || graph.getVertex(i - 1).hasNeighbourNumber(i)))
+            {
+                underlyingGraph.getVertex(i - 1).addNeighbour(i, 0);
+                underlyingGraph.getVertex(i).addNeighbour(i - 1, 0);
+            }
+            if (i + 1 < numberOfVertices && (graph.getVertex(i).hasNeighbourNumber(i + 1) || graph.getVertex(i + 1).hasNeighbourNumber(i)))
+            {
+                underlyingGraph.getVertex(i + 1).addNeighbour(i, 0);
+                underlyingGraph.getVertex(i).addNeighbour(i + 1, 0);
+            }
+            if (i - width >= 0 && (graph.getVertex(i).hasNeighbourNumber(i - width) || graph.getVertex(i - width).hasNeighbourNumber(i)))
+            {
+                underlyingGraph.getVertex(i - width).addNeighbour(i, 0);
+                underlyingGraph.getVertex(i).addNeighbour(i - width, 0);
+            }
+            if (i + width < numberOfVertices && (graph.getVertex(i).hasNeighbourNumber(i + width) || graph.getVertex(i + width).hasNeighbourNumber(i)))
+            {
+                underlyingGraph.getVertex(i + width).addNeighbour(i, 0);
+                underlyingGraph.getVertex(i).addNeighbour(i + width, 0);
+            }
+        }
+        return underlyingGraph;
     }
 
     //endregion
