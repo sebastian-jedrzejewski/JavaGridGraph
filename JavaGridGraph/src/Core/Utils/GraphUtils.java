@@ -12,15 +12,15 @@ public class GraphUtils
 {
     //region PUBLIC METHODS
 
-    public static Graph generate(int width, int height, Random random, Range<Double> edgeWeight, Range<Integer> edgeCount)
+    public static Graph generate(int height, int width, Random random, Range<Double> edgeWeight, Range<Integer> edgeCount)
     {
-        return generate(width, height, random, edgeWeight, edgeCount, edgeCount, false);
+        return generate(height, width, random, edgeWeight, edgeCount, edgeCount, false);
     }
-    public static Graph generate(int width, int height, Random random, Range<Double> edgeWeight, Range<Integer> inputEdgeCount, Range<Integer> outputEdgeCount)
+    public static Graph generate(int height, int width, Random random, Range<Double> edgeWeight, Range<Integer> inputEdgeCount, Range<Integer> outputEdgeCount)
     {
-        return generate(width, height, random, edgeWeight, inputEdgeCount, outputEdgeCount, true);
+        return generate(height, width, random, edgeWeight, inputEdgeCount, outputEdgeCount, true);
     }
-    private static Graph generate(int width, int height, Random random, Range<Double> edgeWeight, Range<Integer> inputEdgeCount, Range<Integer> outputEdgeCount, boolean directed)
+    private static Graph generate(int height, int width, Random random, Range<Double> edgeWeight, Range<Integer> inputEdgeCount, Range<Integer> outputEdgeCount, boolean directed)
     {
         final int[] edgeCountDrawingWeight = new int[] { 1, 2, 3, 8, 16 };
         int numberOfVertices = width * height;
@@ -68,14 +68,18 @@ public class GraphUtils
             }
         }
 
-        Graph graph = new Graph(width, height);
+        Graph graph = new Graph(height, width);
         for (int i = 0; i < numberOfVertices; i++)
         {
             ArrayList<Integer> availableVertices = new ArrayList<>();
+            System.out.println(width);
+            System.out.println(i);
+            System.out.println(i % width);
             if (i % width != 0 && graph.getNumberOfInputNeighbours(i - 1) < inputEdgeCountArray[i - 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - 1)))
             {
                 availableVertices.add(i - 1);
             }
+            System.out.println((i+1)%width);
             if ((i + 1) % width != 0 && graph.getNumberOfInputNeighbours(i + 1) < inputEdgeCountArray[i + 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + 1)))
             {
                 availableVertices.add(i + 1);
@@ -88,7 +92,7 @@ public class GraphUtils
             {
                 availableVertices.add(i + width);
             }
-
+            System.out.println();
             while (graph.getVertex(i).getNumberOfNeighbours() < outputEdgeCountArray[i] && availableVertices.size() > 0)
             {
                 int vertex = availableVertices.get(random.nextInt(availableVertices.size()));

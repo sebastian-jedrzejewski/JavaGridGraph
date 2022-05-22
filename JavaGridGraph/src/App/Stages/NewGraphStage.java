@@ -80,7 +80,7 @@ public class NewGraphStage extends Stage
         labelFieldPane.add(heightLabel, 0, 1);
 
         _heightField = new NumericTextField(NumericTextField.Type.PositiveInteger);
-        _heightField.setMinValue(0);
+        _heightField.setMinValue(1);
         labelFieldPane.add(_heightField, 1, 1);
 
         Separator separator1 = new Separator(Orientation.HORIZONTAL);
@@ -331,11 +331,11 @@ public class NewGraphStage extends Stage
                     return;
                 }
 
-                _graph = GraphUtils.generate(width, height, random, new Range<>(minWeight, maxWeight), new Range<>(minOutputEdges, maxOutputEdges), new Range<>(minInputEdges, maxInputEdges));
+                _graph = GraphUtils.generate(height, width, random, new Range<>(minWeight, maxWeight), new Range<>(minOutputEdges, maxOutputEdges), new Range<>(minInputEdges, maxInputEdges));
             }
             else
             {
-                _graph = GraphUtils.generate(width, height, random, new Range<>(minWeight, maxWeight), new Range<>(minOutputEdges, maxOutputEdges));
+                _graph = GraphUtils.generate(height, width, random, new Range<>(minWeight, maxWeight), new Range<>(minOutputEdges, maxOutputEdges));
             }
 
             if (_saveToFileCheckBox.isSelected())

@@ -6,8 +6,6 @@ import javafx.scene.control.TextField;
 
 public class NumericTextField extends TextField
 {
-    //TODO: non positive integer and double
-
     //region PROPERTIES
 
     private final Type _type;

@@ -113,7 +113,137 @@ public class GraphDrawer extends AnchorPane
                 }
             }
 
-            createVerticesAndEdges();
+            int rows = _graph.getRows();
+            int columns = _graph.getColumns();
+            int vertices_count = rows * columns;
+
+            _vertices = new Circle[vertices_count];
+            _baseEdges = new EdgesCollection[vertices_count];
+            _dijkstraEdges = new ArrayList<>();
+
+            for (int i = 0; i < vertices_count; i++)
+            {
+                int vertexNumber = i;
+
+                _vertices[vertexNumber] = new Circle();
+                _vertices[vertexNumber].setFill(Color.WHITE);
+                _vertices[vertexNumber].hoverProperty().addListener((obs, oldVal, newValue) ->
+                {
+                    Color color;
+                    if (newValue)
+                    {
+                        if (vertexNumber == fromVertexNumber)
+                        {
+                            color = Color.DARKRED;
+                        }
+                        else if (toVerticesNumbers.contains(vertexNumber))
+                        {
+                            color = Color.DARKGREEN;
+                        }
+                        else
+                        {
+                            color = Color.LIGHTGREY;
+                        }
+                    }
+                    else
+                    {
+                        if (vertexNumber == fromVertexNumber)
+                        {
+                            color = Color.RED;
+                        }
+                        else if (toVerticesNumbers.contains(vertexNumber))
+                        {
+                            color = Color.GREEN;
+                        }
+                        else
+                        {
+                            color = Color.WHITE;
+                        }
+                    }
+                    _vertices[vertexNumber].setFill(color);
+                });
+                _vertices[vertexNumber].setOnMouseClicked(new EventHandler<MouseEvent>()
+                {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        if (mouseEvent.getButton() == MouseButton.PRIMARY)
+                        {
+                            if (fromVertexNumber == vertexNumber)
+                            {
+                                _vertices[fromVertexNumber].setFill(Color.WHITE);
+                                fromVertexNumber = -1;
+                            }
+                            else
+                            {
+                                if (toVerticesNumbers.contains(vertexNumber))
+                                {
+                                    toVerticesNumbers.remove((Integer)vertexNumber);
+                                }
+
+                                if (fromVertexNumber != -1)
+                                {
+                                    _vertices[fromVertexNumber].setFill(Color.WHITE);
+                                }
+
+                                fromVertexNumber = vertexNumber;
+                                _vertices[fromVertexNumber].setFill(Color.RED);
+                            }
+                            updateDijkstra();
+                        }
+                        else if (mouseEvent.getButton() == MouseButton.SECONDARY)
+                        {
+                            if (fromVertexNumber != vertexNumber)
+                            {
+                                if (toVerticesNumbers.contains(vertexNumber))
+                                {
+                                    toVerticesNumbers.remove((Integer)vertexNumber);
+                                    _vertices[vertexNumber].setFill(Color.WHITE);
+                                }
+                                else
+                                {
+                                    toVerticesNumbers.add(vertexNumber);
+                                    _vertices[vertexNumber].setFill(Color.GREEN);
+                                }
+                                updateDijkstra();
+                            }
+                        }
+                    }
+                });
+
+                Vertex vertex = _graph.getVertex(i);
+                _baseEdges[vertexNumber] = new EdgesCollection();
+                if (vertex.hasNeighbourNumber(i - 1))
+                {
+                    Edge edge = new Edge();
+                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - 1))));
+                    _baseEdges[vertexNumber].setLeft(i - 1, edge);
+                }
+                if (vertex.hasNeighbourNumber(i + 1))
+                {
+                    Edge edge = new Edge();
+                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + 1))));
+                    _baseEdges[vertexNumber].setRight(i + 1, edge);
+                }
+                if (vertex.hasNeighbourNumber(i - columns))
+                {
+                    Edge edge = new Edge();
+                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - columns))));
+                    _baseEdges[vertexNumber].setTop(i - columns, edge);
+                }
+                if (vertex.hasNeighbourNumber(i + columns))
+                {
+                    Edge edge = new Edge();
+                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + columns))));
+                    _baseEdges[vertexNumber].setBottom(i + columns, edge);
+                }
+            }
+
+            this.getChildren().addAll(_vertices);
+            for (int i = 0; i < vertices_count; i++)
+            {
+                this.getChildren().addAll(_baseEdges[i].getAllEdges());
+            }
+
             updatePosition();
         }
     }
@@ -136,140 +266,6 @@ public class GraphDrawer extends AnchorPane
 
 
     //region PRIVATE METHODS
-
-    private void createVerticesAndEdges()
-    {
-        int rows = _graph.getRows();
-        int columns = _graph.getColumns();
-        int vertices_count = rows * columns;
-
-        _vertices = new Circle[vertices_count];
-        _baseEdges = new EdgesCollection[vertices_count];
-        _dijkstraEdges = new ArrayList<>();
-
-        for (int i = 0; i < vertices_count; i++)
-        {
-            int vertexNumber = i;
-
-            _vertices[vertexNumber] = new Circle();
-            _vertices[vertexNumber].setFill(Color.WHITE);
-            _vertices[vertexNumber].hoverProperty().addListener((obs, oldVal, newValue) ->
-            {
-                Color color;
-                if (newValue)
-                {
-                    if (vertexNumber == fromVertexNumber)
-                    {
-                        color = Color.DARKRED;
-                    }
-                    else if (toVerticesNumbers.contains(vertexNumber))
-                    {
-                        color = Color.DARKGREEN;
-                    }
-                    else
-                    {
-                        color = Color.LIGHTGREY;
-                    }
-                }
-                else
-                {
-                    if (vertexNumber == fromVertexNumber)
-                    {
-                        color = Color.RED;
-                    }
-                    else if (toVerticesNumbers.contains(vertexNumber))
-                    {
-                        color = Color.GREEN;
-                    }
-                    else
-                    {
-                        color = Color.WHITE;
-                    }
-                }
-                _vertices[vertexNumber].setFill(color);
-            });
-            _vertices[vertexNumber].setOnMouseClicked(new EventHandler<MouseEvent>()
-            {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                    {
-                        if (fromVertexNumber == vertexNumber)
-                        {
-                            _vertices[fromVertexNumber].setFill(Color.WHITE);
-                            fromVertexNumber = -1;
-                        }
-                        else
-                        {
-                            if (toVerticesNumbers.contains(vertexNumber))
-                            {
-                                toVerticesNumbers.remove((Integer)vertexNumber);
-                            }
-
-                            if (fromVertexNumber != -1)
-                            {
-                                _vertices[fromVertexNumber].setFill(Color.WHITE);
-                            }
-
-                            fromVertexNumber = vertexNumber;
-                            _vertices[fromVertexNumber].setFill(Color.RED);
-                        }
-                        updateDijkstra();
-                    }
-                    else if (mouseEvent.getButton() == MouseButton.SECONDARY)
-                    {
-                        if (fromVertexNumber != vertexNumber)
-                        {
-                            if (toVerticesNumbers.contains(vertexNumber))
-                            {
-                                toVerticesNumbers.remove((Integer)vertexNumber);
-                                _vertices[vertexNumber].setFill(Color.WHITE);
-                            }
-                            else
-                            {
-                                toVerticesNumbers.add(vertexNumber);
-                                _vertices[vertexNumber].setFill(Color.GREEN);
-                            }
-                            updateDijkstra();
-                        }
-                    }
-                }
-            });
-
-            Vertex vertex = _graph.getVertex(i);
-            _baseEdges[vertexNumber] = new EdgesCollection();
-            if (vertex.hasNeighbourNumber(i - 1))
-            {
-                Edge edge = new Edge();
-                edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - 1))));
-                _baseEdges[vertexNumber].setLeft(i - 1, edge);
-            }
-            if (vertex.hasNeighbourNumber(i + 1))
-            {
-                Edge edge = new Edge();
-                edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + 1))));
-                _baseEdges[vertexNumber].setRight(i + 1, edge);
-            }
-            if (vertex.hasNeighbourNumber(i - columns))
-            {
-                Edge edge = new Edge();
-                edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - columns))));
-                _baseEdges[vertexNumber].setTop(i - columns, edge);
-            }
-            if (vertex.hasNeighbourNumber(i + columns))
-            {
-                Edge edge = new Edge();
-                edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + columns))));
-                _baseEdges[vertexNumber].setBottom(i + columns, edge);
-            }
-        }
-
-        this.getChildren().addAll(_vertices);
-        for (int i = 0; i < vertices_count; i++)
-        {
-            this.getChildren().addAll(_baseEdges[i].getAllEdges());
-        }
-    }
 
     private void updatePosition()
     {
