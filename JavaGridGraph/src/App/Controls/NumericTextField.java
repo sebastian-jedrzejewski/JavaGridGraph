@@ -30,8 +30,9 @@ public class NumericTextField extends TextField
         _minValue = Double.NaN;
         _maxValue = Double.NaN;
 
-        super.textProperty().addListener(new textChanged());
-        super.setText(text);
+        this.textProperty().addListener(new textChanged());
+
+        this.setText(text);
     }
 
     //endregion

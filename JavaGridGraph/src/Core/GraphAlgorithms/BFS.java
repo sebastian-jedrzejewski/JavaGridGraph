@@ -35,7 +35,7 @@ public class BFS
     {
         List<Result> nonNullResults = Arrays.stream(_results).filter(Objects::nonNull).toList();
         Result result;
-        if (nonNullResults.stream().count() > 0)
+        if (nonNullResults.size() > 0)
         {
             result = nonNullResults.get(0);
         }

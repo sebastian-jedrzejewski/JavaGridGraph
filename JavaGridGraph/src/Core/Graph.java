@@ -27,13 +27,13 @@ public class Graph implements Iterable<Vertex> {
 
     public int getNumberOfInputNeighbours(int number) {
         int count = 0;
-        if(number % columns != 0 && vertices[number-1].hasNeighbourNumber(number))
+        if(number % columns != 0 && number - 1 >= 0 && vertices[number-1].hasNeighbourNumber(number))
             count++;
-        if((number+1) % columns != 0 && vertices[number+1].hasNeighbourNumber(number))
+        if((number+1) % columns != 0 && number + 1 < vertices.length && vertices[number+1].hasNeighbourNumber(number))
             count++;
         if(number - columns >= 0 && vertices[number-columns].hasNeighbourNumber(number))
             count++;
-        if(number+columns < vertices.length && vertices[number+columns].hasNeighbourNumber(number))
+        if(number + columns < vertices.length && vertices[number+columns].hasNeighbourNumber(number))
             count++;
 
         return count;

@@ -71,12 +71,13 @@ public class GraphUtils
         Graph graph = new Graph(height, width);
         for (int i = 0; i < numberOfVertices; i++)
         {
+            int row = i / width;
             ArrayList<Integer> availableVertices = new ArrayList<>();
-            if (i % width != 0 && graph.getNumberOfInputNeighbours(i - 1) < inputEdgeCountArray[i - 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - 1)))
+            if (i - 1 >= 0 && (i - 1) / width == row && graph.getNumberOfInputNeighbours(i - 1) < inputEdgeCountArray[i - 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i - 1)))
             {
                 availableVertices.add(i - 1);
             }
-            if ((i + 1) % width != 0 && graph.getNumberOfInputNeighbours(i + 1) < inputEdgeCountArray[i + 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + 1)))
+            if ((i + 1) / width == row && graph.getNumberOfInputNeighbours(i + 1) < inputEdgeCountArray[i + 1] && (directed || !graph.getVertex(i).hasNeighbourNumber(i + 1)))
             {
                 availableVertices.add(i + 1);
             }
