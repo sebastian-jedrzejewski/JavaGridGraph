@@ -1,6 +1,7 @@
 package Core.GraphAlgorithms;
 
 import Core.Graph;
+import Core.Helpers.Dimensions2D;
 import Core.Helpers.Range;
 import Core.Vertex;
 
@@ -12,22 +13,23 @@ public class GraphUtils
 {
     //region PUBLIC METHODS
 
-    public static Graph generate(int height, int width, Random random, Range<Double> edgeWeight, Range<Integer> edgeCount)
+    public static Graph generate(Dimensions2D size, Random random, Range edgeWeight, Range edgeCount)
     {
-        return generate(height, width, random, edgeWeight, edgeCount, edgeCount, false);
+        return generate(size, random, edgeWeight, edgeCount, edgeCount, false);
     }
-    public static Graph generate(int height, int width, Random random, Range<Double> edgeWeight, Range<Integer> inputEdgeCount, Range<Integer> outputEdgeCount)
+    public static Graph generate(Dimensions2D size, Random random, Range edgeWeight, Range inputEdgeCount, Range outputEdgeCount)
     {
-        return generate(height, width, random, edgeWeight, inputEdgeCount, outputEdgeCount, true);
+        return generate(size, random, edgeWeight, inputEdgeCount, outputEdgeCount, true);
     }
-    private static Graph generate(int height, int width, Random random, Range<Double> edgeWeight, Range<Integer> inputEdgeCount, Range<Integer> outputEdgeCount, boolean directed)
+    private static Graph generate(Dimensions2D size, Random random, Range edgeWeight, Range inputEdgeCount, Range outputEdgeCount, boolean directed)
     {
         final int[] edgeCountDrawingWeight = new int[] { 1, 2, 3, 8, 16 };
-        int numberOfVertices = width * height;
+        int width = (int)size.getWidth();
+        int numberOfVertices = (int)size.getArea();
 
         ArrayList<Integer> inputEdgeCountDrawingList = new ArrayList<>();
         ArrayList<Integer> outputEdgeCountDrawingList = new ArrayList<>();
-        for (int i = inputEdgeCount.getLow(); i < inputEdgeCount.getHigh() + 1; i++)
+        for (int i = (int)inputEdgeCount.getLow(); i < (int)inputEdgeCount.getHigh() + 1; i++)
         {
             int weight = edgeCountDrawingWeight[i];
             while (weight > 0)
@@ -38,7 +40,7 @@ public class GraphUtils
         }
         if (directed)
         {
-            for (int i = outputEdgeCount.getLow(); i < outputEdgeCount.getHigh() + 1; i++)
+            for (int i = (int)outputEdgeCount.getLow(); i < (int)outputEdgeCount.getHigh() + 1; i++)
             {
                 int weight = edgeCountDrawingWeight[i];
                 while (weight > 0)
@@ -68,7 +70,7 @@ public class GraphUtils
             }
         }
 
-        Graph graph = new Graph(height, width);
+        Graph graph = new Graph(size);
         for (int i = 0; i < numberOfVertices; i++)
         {
             int row = i / width;
@@ -110,7 +112,7 @@ public class GraphUtils
     public static void write(Graph graph, File file) throws IOException
     {
         PrintWriter printWriter = new PrintWriter(new FileWriter(file));
-        printWriter.printf("%d %d\n", graph.getRows(), graph.getColumns());
+        printWriter.printf("%d %d\n", (int)graph.getSize().getHeight(), (int)graph.getSize().getWidth());
         for (Vertex vertex : graph)
         {
             printWriter.print("\t");
@@ -174,10 +176,9 @@ public class GraphUtils
 
     public static Graph convertToUnderlying(Graph graph)
     {
-        int width = graph.getColumns();
-        int height = graph.getRows();
-        int numberOfVertices = width * height;
-        Graph underlyingGraph = new Graph(height, width);
+        int width = (int)graph.getSize().getWidth();
+        int numberOfVertices = (int)graph.getSize().getArea();
+        Graph underlyingGraph = new Graph(graph.getSize());
         for (int i = 0; i < numberOfVertices; i++)
         {
             if (i - 1 >= 0 && (graph.getVertex(i).hasNeighbourNumber(i - 1) || graph.getVertex(i - 1).hasNeighbourNumber(i)))

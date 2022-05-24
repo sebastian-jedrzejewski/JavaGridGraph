@@ -1,11 +1,11 @@
 package Core.Helpers;
 
-public class Range<Number>
+public class Range
 {
     //region PROPERTIES
 
-    private Number _low;
-    private Number _high;
+    private double low;
+    private double high;
 
     //endregion
 
@@ -13,10 +13,10 @@ public class Range<Number>
 
     //region CONSTRUCTOR
 
-    public Range(Number low, Number high)
+    public Range(double low, double high)
     {
-        _low = low;
-        _high = high;
+        this.low = low;
+        this.high = high;
     }
 
     //endregion
@@ -25,22 +25,27 @@ public class Range<Number>
 
     //region PUBLIC METHODS
 
-    public Number getLow()
+    public double getLow()
     {
-        return _low;
+        return low;
     }
-    public void setLow(Number low)
+    public void setLow(double low)
     {
-        _low = low;
+        this.low = low;
     }
 
-    public Number getHigh()
+    public double getHigh()
     {
-        return _high;
+        return high;
     }
-    public void setHigh(Number high)
+    public void setHigh(double high)
     {
-        _high = high;
+        this.high = high;
+    }
+
+    public double getDifference()
+    {
+        return high - low;
     }
 
     //endregion

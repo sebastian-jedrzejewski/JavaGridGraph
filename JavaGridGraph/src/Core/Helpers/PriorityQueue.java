@@ -2,41 +2,62 @@ package Core.Helpers;
 
 import Core.Vertex;
 
-public class PriorityQueue {
+public class PriorityQueue
+{
+    //region PROPERTIES
+
     private final Vertex[] q; // array of vertices; priority is the smallest weight to reach the vertex from the source
     private final int [] pn; // positions of vertices in q
     private int n; // number of elements in q
 
-    public PriorityQueue(int n) {
+    //endregion
+
+
+
+    //region CONSTRUCTORS
+
+    public PriorityQueue(int n)
+    {
         this.q = new Vertex[n];
         this.pn = new int[n];
         this.n = 0;
     }
 
-    public int getPosition(int i) {
-        if(i < 0 || i >= pn.length) {
+    //endregion
+
+
+
+    //region PUBLIC METHODS
+
+    public int getPosition(int i)
+    {
+        if (i < 0 || i >= pn.length)
+        {
             throw new IllegalArgumentException("Invalid index in positions array");
         }
         return pn[i];
     }
 
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return n == 0;
     }
 
-    public void push(Vertex v) {
+    public void push(Vertex v)
+    {
         // q.length is also max size of priority queue because it is the number of vertices in graph, which is constant
-        if(n == q.length) {
+        if(n == q.length)
+        {
             throw new IllegalArgumentException("Too many elements in priority queue");
         }
 
         q[n++] = v;
         pn[v.getNumber()] = n-1;
         heapUp(n-1);
-
     }
 
-    public Vertex pop() {
+    public Vertex pop()
+    {
         Vertex v = q[0];
         pn[q[0].getNumber()] = -1;
         pn[q[n-1].getNumber()] = 0;

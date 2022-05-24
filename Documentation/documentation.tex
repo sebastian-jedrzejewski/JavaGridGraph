@@ -6,12 +6,11 @@
 \usepackage{indentfirst}
 \usepackage{hyperref}
 \usepackage{tikz}
+\usepackage{pgf-umlcd}
+\usepackage{tikz-among-us}
 \usepackage{graphicx}
 
 \graphicspath{ {./images/} }
-
-\usetikzlibrary{positioning}
-\usetikzlibrary{calc}
 
 \def\console #1{\begingroup\fontfamily{qcr}\selectfont#1\endgroup}
 \newenvironment{multiconsole}{\begingroup\fontfamily{qcr}\selectfont}{\endgroup}
@@ -55,7 +54,14 @@
     \newpage
     \section{Cel projektu}
 
-    Program \textbf{JavaGridGraph} ma na celu wygenerowanie grafu siatkowego o podanych paramentrach oraz zapisanie go do pliku lub wczytanie grafu z pliku oraz sprawdzenie wybranych jego parametrów. Program posiada interfejs graficzny. Grafy są przedstawiane w plikach w postaci listy sąsiedztwa.
+    Program \textbf{JavaGridGraph} ma na celu umożliwiać wykonanie dwóch podstawowych zadań
+
+    \begin{itemize}
+        \item wygenerowanie grafu siatkowego o podanych paramentrach
+        \item sprawdzenie wybranych parametrów dowolnego grafu siatkowego
+    \end{itemize}
+
+    Program posiada interfejs graficzny. Grafy są przedstawiane w plikach w postaci listy sąsiedztwa.
 
 
 
@@ -73,8 +79,10 @@
         \item określonej wysokości (ilości wierszy)
         \item określonej szerokości (ilości kolumn)
         \item określonej minimalnej i maksymalnej wadze krawędzi
-        \item określonej minimalnej i maksymalnej ilości krawędzi wychodzących z pojedyńczego wierzchołka
-        \item stałym ziarnie generatora liczb losowych
+        \item określonej minimalnej i maksymalnej ilości krawędzi wychodzących z pojedyńczego wierzchołka (dla grafu skierowanego)
+        \item określonej minimalnej i maksymalnej ilości krawędzi wchodzących do pojedyńczego wierzchołka (dla grafu skierowanego)
+        \item określonej minimalnej i maksymalnej ilości "sąsiadów" pojedyńczego wierzchołka (dla grafu nieskierowanego)
+        \item niestandardowym ziarnie generatora liczb losowych
     \end{itemize}
 
     Program umożliwia zapis wygenerowanego grafu do pliku oraz/lub wczytanie grafu do sprawdzenia.
@@ -100,7 +108,7 @@
 
     \begin{enumerate}
         \item Wynik sprawdzenia spójności grafu. W przypadku gdy graf nie został wczytany, zostanie pokazana informacja o tym że graf nie został wczytany.
-        \item Przycisk "Open" otwiera systemowe okno wyboru pliku w celu wybrania pliku zawierającego graf
+        \item Przycisk "Open" otwiera systemowe okno wyboru pliku w celu wybrania pliku zawierającego graf.
         \item Przycisk "New" otwiera okno generowania grafu. Więcej informacji w punkcie "Okno generowania grafu".
     \end{enumerate}
 
@@ -109,15 +117,17 @@
     \includegraphics[width=\textwidth]{view2.png}
 
     \begin{enumerate}
-        \item Liczba kolumn (szerokość) grafu. Nie może być mniejsza niż 1.
-        \item Liczba wierszy (wysokość) grafu. Nie może być mniejsza niż 1.
-        \item Waga krawędzi. Wartość w obu polach nie może być mniejsza od 0, dodatkowo wartość w pierwszym polu (od lewej) musi być mniejsza bądź równa wartości w drugim polu.
-        \item Liczba krawędzi wychodzących z pojedyńczego wierzchołka. Wartość w obu polach nie może być mniejsza od 0 i większa od 4, dodatkowo wartość w pierwszym polu (od lewej) musi być mniejsza bądź równa wartości w drugim polu.
-        \item Niestandardowe ziarno generatora liczb losowych. Musi być liczbą całkowitą.
-        \item Zaznaczenie tego pola spowoduje zapisanie grafu w podanej w polu po prawej lokalizacji. Lokalizację można wybrać także za pomocą przycisku "...". Kliknięcie go spowoduje otworzenie systemowego okna zapisu pliku.
+        \item Liczba kolumn (szerokość) grafu. Pole nie może być puste.
+        \item Liczba wierszy (wysokość) grafu. Pole nie może być puste.
+        \item Waga krawędzi. Wartość w pierwszym polu (min, domyślnie 0) musi być mniejsza bądź równa wartości w drugim polu (max, domyślnie 1).
+        \item Wybór między generowaniem grafu skierowanego (directed), generowaniem grafu nieskierowanego (not directed).
+        \item Liczba krawędzi wychodzących z pojedyńczego wierzchołka. Wartość w pierwszym polu (min, domyślnie 0) musi być mniejsza bądź równa wartości w drugim polu (max, domyślnie 4). [Tylko gdy zaznaczone generowanie grafu skierowanego]\footnote{Program będzie dążył do utworzenia co najmniej minimalnej liczby krawędzi (połączeń do sąsiadów), ale nie może tego zagwarantować. Nie jest możliwe wygenerowanie więcej niż 2 krawędzi dla wierzchołków w narożnikach oraz więcej niż 3 dla wierzchołków bocznych. Nie jest możliwe także utworzenie krawędzi, jeżeli wszystkie wierzchołki wokół osiągnęły już swoją nominalną (wylosowaną z podanego przedziału) liczbę krawędzi.}
+        \item Liczba krawędzi wchodzących do pojedyńczego wierzchołka. Wartość w pierwszym polu (min, domyślnie 0) musi być mniejsza bądź równa wartości w drugim polu (max, domyślnie 4). [Tylko gdy zaznaczone generowanie grafu skierowanego]\footnotemark[\value{footnote}]
+        \item Liczba sąsiadów pojedyńczego wierzchołka. Wartość w pierwszym polu (min, domyślnie 0) musi być mniejsza bądź równa wartości w drugim polu (max, domyślnie 4). [Tylko gdy zaznaczone generowanie grafu nieskierowanego]\footnotemark[\value{footnote}]
+        \item Niestandardowe ziarno generatora liczb losowych.
+        \item Zaznaczenie tego pola spowoduje zapisanie grafu w pliku wybranym w systemowym oknie zapisu pliku, które wyświetli się po naciśnięciu przycisku "Generate".
         \item Zaznaczenie tego pola spowoduje wczytanie grafu do programu zaraz po jego wygenerowaniu.
         \item Kliknięcie przycisku spowoduje wygenerowanie grafu o podanych parametrach.
-        \item Kliknięcie przycisku spowoduje zamknięcie okna
     \end{enumerate}
 
     \subsection{Okno główne - po wczytaniu grafu}
@@ -127,7 +137,7 @@
     \begin{enumerate}
         \item Wynik sprawdzenia spójności grafu. "Connected" - spójny, "Unconnected" - niespójny.
         \item Kliknięcie przycisku spowoduje odznaczenie wszystkich zaznaczonych wierzchołków na grafie.
-        \item Pole w którym wyświetlany jest graf. Aby znaleźć najkrótsze ścieżki musimy wybrać wierzchołek $A$ prawym przyciskiem myszy oraz wierzchołki $B_n$ lewym przyciskiem myszy. Po wybraniu wierzchołka $A$ oraz przynajmniej jednego wierzchołka $B$ zostanie narysowana najkrótsza ścieżka od wierzchołka $A$ do wierzchołka $B_n$.
+        \item Pole w którym wyświetlany jest graf. Aby znaleźć najkrótsze ścieżki musimy wybrać wierzchołek $A$ lewym przyciskiem myszy (zostanie zaznaczony na czerwono) oraz wierzchołki $B_n$ prawym przyciskiem myszy (zostaną zaznaczone na zielono). Po wybraniu wierzchołka $A$ oraz przynajmniej jednego wierzchołka $B$ zostanie narysowana najkrótsza ścieżka od wierzchołka $A$ do wierzchołka $B_n$.
     \end{enumerate}
 
 
@@ -165,6 +175,21 @@
 
     \newpage
     \section{Diagram klas}
+    \begin{center}
+        \includegraphics[width=\textwidth]{uml.png}
+    \end{center}
 
-    \includegraphics[width=\textwidth]{diagram.png}
+    \newpage
+    \section{Interfejs (Pakiet App)}
+
+    Interfejs aplikacji został stworzony przy wykorzystaniu biblioteki JavaFX. Pakiet \textbf{App} składa się z dwóch podpakietów:
+
+    \begin{itemize}
+        \item \textbf{Controls} zawierającym niestandardowe kontrolki
+        \item \textbf{Stages} zawierającym widoki aplikacji
+    \end{itemize}
+
+    \newpage
+    \subsection{App}
+
 \end{document}

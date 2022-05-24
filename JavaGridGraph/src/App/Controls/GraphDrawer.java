@@ -2,6 +2,7 @@ package App.Controls;
 
 import Core.Graph;
 import Core.GraphAlgorithms.Dijkstra;
+import Core.Helpers.Range;
 import Core.Vertex;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
@@ -23,25 +24,18 @@ public class GraphDrawer extends AnchorPane
 {
     //region PROPERTIES
 
-    private Graph _graph;
-    private double _minGraphsWeight;
-    private double _maxGraphsWeight;
+    private Graph graph;
+    private Range graphWeightRange;
 
-    private Insets _margin;
-    private double _verticesSpacingRatio;
-    private double _edgesSpacingRatio;
-    private double _edgesNormalWidthRatio;
-    private double _edgesSelectedWidthRatio;
-    private double _edgesNormalRadiusRatio;
-    private double _edgesSelectedRadiusRatio;
+    private Insets margin;
 
-    private Circle[] _vertices;
-    private EdgesCollection[] _baseEdges;
-    private ArrayList<Edge> _dijkstraEdges;
+    private Circle[] vertices;
+    private EdgesCollection[] baseEdges;
+    private ArrayList<Edge> selectedEdges;
 
-    private Dijkstra _dijkstra;
-    private int _fromVertexNumber;
-    private ArrayList<Integer> _toVerticesNumbers;
+    private Dijkstra dijkstra;
+    private int fromVertexNumber;
+    private ArrayList<Integer> toVerticesNumbers;
 
     //endregion
 
@@ -53,37 +47,30 @@ public class GraphDrawer extends AnchorPane
     {
         this.setStyle("-fx-background-color: #000000");
         this.widthProperty().addListener((obs, oldVal, newVal) -> {
-            if (_graph != null)
+            if (this.graph != null)
             {
                 updatePosition();
             }
         });
         this.heightProperty().addListener((obs, oldVal, newVal) -> {
-            if (_graph != null)
+            if (this.graph != null)
             {
                 updatePosition();
             }
         });
 
-        _graph = null;
-        _minGraphsWeight = Double.NaN;
-        _maxGraphsWeight = Double.NaN;
+        this.graph = null;
+        this.graphWeightRange = null;
 
-        _margin = new Insets(0);
-        _verticesSpacingRatio = 0.5;
-        _edgesSpacingRatio = 0.1;
-        _edgesNormalWidthRatio = 0.05;
-        _edgesSelectedWidthRatio = 0.15;
-        _edgesNormalRadiusRatio = 0.1;
-        _edgesSelectedRadiusRatio = 0.15;
+        this.margin = new Insets(0);
 
-        _vertices = new Circle[0];
-        _baseEdges = new EdgesCollection[0];
-        _dijkstraEdges = new ArrayList<>();
+        this.vertices = new Circle[0];
+        this.baseEdges = new EdgesCollection[0];
+        this.selectedEdges = new ArrayList<>();
 
-        _dijkstra = null;
-        _fromVertexNumber = -1;
-        _toVerticesNumbers = new ArrayList<>();
+        this.dijkstra = null;
+        this.fromVertexNumber = -1;
+        this.toVerticesNumbers = new ArrayList<>();
     }
 
     //endregion
@@ -92,61 +79,43 @@ public class GraphDrawer extends AnchorPane
 
     //region PUBLIC METHODS
 
-    public Graph getGraph() { return _graph; }
+    public Graph getGraph() { return graph; }
     public void setGraph(Graph graph)
     {
-        _fromVertexNumber = -1;
-        _toVerticesNumbers = new ArrayList<>();
+        fromVertexNumber = -1;
+        toVerticesNumbers = new ArrayList<>();
 
         this.getChildren().clear();
 
         if (graph != null)
         {
-            _minGraphsWeight = Double.MAX_VALUE;
-            _maxGraphsWeight = 0;
-            _graph = graph;
-            _dijkstra = new Dijkstra(_graph);
+            this.graph = graph;
+            this.graphWeightRange = this.graph.getWeightRange();
+            dijkstra = new Dijkstra(graph);
 
-            for (Vertex vertex: _graph)
-            {
-                for (int i = 0; i < vertex.getNumberOfNeighbours(); i++)
-                {
-                    double weight = vertex.getNeighbourWeight(i);
-                    if (weight > _maxGraphsWeight)
-                    {
-                        _maxGraphsWeight = weight;
-                    }
-                    if (weight < _minGraphsWeight)
-                    {
-                        _minGraphsWeight = weight;
-                    }
-                }
-            }
+            int width = (int)graph.getSize().getWidth();
+            int verticesCount = (int)graph.getSize().getArea();
 
-            int rows = _graph.getRows();
-            int columns = _graph.getColumns();
-            int vertices_count = rows * columns;
+            vertices = new Circle[verticesCount];
+            baseEdges = new EdgesCollection[verticesCount];
+            selectedEdges = new ArrayList<>();
 
-            _vertices = new Circle[vertices_count];
-            _baseEdges = new EdgesCollection[vertices_count];
-            _dijkstraEdges = new ArrayList<>();
-
-            for (int i = 0; i < vertices_count; i++)
+            for (int i = 0; i < verticesCount; i++)
             {
                 int vertexNumber = i;
 
-                _vertices[vertexNumber] = new Circle();
-                _vertices[vertexNumber].setFill(Color.WHITE);
-                _vertices[vertexNumber].hoverProperty().addListener((obs, oldVal, newValue) ->
+                vertices[vertexNumber] = new Circle();
+                vertices[vertexNumber].setFill(Color.WHITE);
+                vertices[vertexNumber].hoverProperty().addListener((obs, oldVal, newValue) ->
                 {
                     Color color;
                     if (newValue)
                     {
-                        if (vertexNumber == _fromVertexNumber)
+                        if (vertexNumber == fromVertexNumber)
                         {
                             color = Color.DARKRED;
                         }
-                        else if (_toVerticesNumbers.contains(vertexNumber))
+                        else if (toVerticesNumbers.contains(vertexNumber))
                         {
                             color = Color.DARKGREEN;
                         }
@@ -157,11 +126,11 @@ public class GraphDrawer extends AnchorPane
                     }
                     else
                     {
-                        if (vertexNumber == _fromVertexNumber)
+                        if (vertexNumber == fromVertexNumber)
                         {
                             color = Color.RED;
                         }
-                        else if (_toVerticesNumbers.contains(vertexNumber))
+                        else if (toVerticesNumbers.contains(vertexNumber))
                         {
                             color = Color.GREEN;
                         }
@@ -170,49 +139,49 @@ public class GraphDrawer extends AnchorPane
                             color = Color.WHITE;
                         }
                     }
-                    _vertices[vertexNumber].setFill(color);
+                    vertices[vertexNumber].setFill(color);
                 });
-                _vertices[vertexNumber].setOnMouseClicked(new EventHandler<MouseEvent>()
+                vertices[vertexNumber].setOnMouseClicked(new EventHandler<MouseEvent>()
                 {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         if (mouseEvent.getButton() == MouseButton.PRIMARY)
                         {
-                            if (_fromVertexNumber == vertexNumber)
+                            if (fromVertexNumber == vertexNumber)
                             {
-                                _vertices[_fromVertexNumber].setFill(Color.WHITE);
-                                _fromVertexNumber = -1;
+                                vertices[fromVertexNumber].setFill(Color.WHITE);
+                                fromVertexNumber = -1;
                             }
                             else
                             {
-                                if (_toVerticesNumbers.contains(vertexNumber))
+                                if (toVerticesNumbers.contains(vertexNumber))
                                 {
-                                    _toVerticesNumbers.remove((Integer)vertexNumber);
+                                    toVerticesNumbers.remove((Integer)vertexNumber);
                                 }
 
-                                if (_fromVertexNumber != -1)
+                                if (fromVertexNumber != -1)
                                 {
-                                    _vertices[_fromVertexNumber].setFill(Color.WHITE);
+                                    vertices[fromVertexNumber].setFill(Color.WHITE);
                                 }
 
-                                _fromVertexNumber = vertexNumber;
-                                _vertices[_fromVertexNumber].setFill(Color.RED);
+                                fromVertexNumber = vertexNumber;
+                                vertices[fromVertexNumber].setFill(Color.RED);
                             }
                             updateDijkstra();
                         }
                         else if (mouseEvent.getButton() == MouseButton.SECONDARY)
                         {
-                            if (_fromVertexNumber != vertexNumber)
+                            if (fromVertexNumber != vertexNumber)
                             {
-                                if (_toVerticesNumbers.contains(vertexNumber))
+                                if (toVerticesNumbers.contains(vertexNumber))
                                 {
-                                    _toVerticesNumbers.remove((Integer)vertexNumber);
-                                    _vertices[vertexNumber].setFill(Color.WHITE);
+                                    toVerticesNumbers.remove((Integer)vertexNumber);
+                                    vertices[vertexNumber].setFill(Color.WHITE);
                                 }
                                 else
                                 {
-                                    _toVerticesNumbers.add(vertexNumber);
-                                    _vertices[vertexNumber].setFill(Color.GREEN);
+                                    toVerticesNumbers.add(vertexNumber);
+                                    vertices[vertexNumber].setFill(Color.GREEN);
                                 }
                                 updateDijkstra();
                             }
@@ -220,128 +189,50 @@ public class GraphDrawer extends AnchorPane
                     }
                 });
 
-                Vertex vertex = _graph.getVertex(i);
-                _baseEdges[vertexNumber] = new EdgesCollection();
-                int row = i / columns;
-                if (vertex.hasNeighbourNumber(i - 1) && (i - 1) / columns == row)
+                Vertex vertex = graph.getVertex(i);
+                baseEdges[vertexNumber] = new EdgesCollection();
+                int row = i / width;
+                if (vertex.hasNeighbourNumber(i - 1) && (i - 1) / width == row)
                 {
                     Edge edge = new Edge();
                     edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - 1))));
-                    _baseEdges[vertexNumber].setLeft(i - 1, edge);
+                    baseEdges[vertexNumber].setLeft(i - 1, edge);
                 }
-                if (vertex.hasNeighbourNumber(i + 1) && (i + 1) / columns == row)
+                if (vertex.hasNeighbourNumber(i + 1) && (i + 1) / width == row)
                 {
                     Edge edge = new Edge();
                     edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + 1))));
-                    _baseEdges[vertexNumber].setRight(i + 1, edge);
+                    baseEdges[vertexNumber].setRight(i + 1, edge);
                 }
-                if (vertex.hasNeighbourNumber(i - columns))
+                if (vertex.hasNeighbourNumber(i - width))
                 {
                     Edge edge = new Edge();
-                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - columns))));
-                    _baseEdges[vertexNumber].setTop(i - columns, edge);
+                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - width))));
+                    baseEdges[vertexNumber].setTop(i - width, edge);
                 }
-                if (vertex.hasNeighbourNumber(i + columns))
+                if (vertex.hasNeighbourNumber(i + width))
                 {
                     Edge edge = new Edge();
-                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + columns))));
-                    _baseEdges[vertexNumber].setBottom(i + columns, edge);
+                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + width))));
+                    baseEdges[vertexNumber].setBottom(i + width, edge);
                 }
             }
 
-            this.getChildren().addAll(_vertices);
-            for (int i = 0; i < vertices_count; i++)
+            this.getChildren().addAll(vertices);
+            for (int i = 0; i < verticesCount; i++)
             {
-                this.getChildren().addAll(_baseEdges[i].getAllEdges());
+                this.getChildren().addAll(baseEdges[i].getAllEdges());
             }
 
             updatePosition();
         }
     }
 
-    public Insets getMargin() { return _margin; }
+    public Insets getMargin() { return margin; }
     public void setMargin(Insets margin)
     {
-        _margin = margin;
-        if (_graph != null)
-        {
-            updatePosition();
-        }
-    }
-    
-    public double getVerticesSpacingRatio()
-    {
-        return _verticesSpacingRatio;
-    }
-    public void setVerticesSpacingRatio(double value)
-    {
-        _verticesSpacingRatio = value;
-        if (_graph != null)
-        {
-            updatePosition();
-        }
-    }
-    
-    public double getEdgesSpacingRatio()
-    {
-        return _edgesSpacingRatio;
-    }
-    public void setEdgesSpacingRatio(double value)
-    {
-        _edgesSpacingRatio = value;
-        if (_graph != null)
-        {
-            updatePosition();
-        }
-    }
-
-    public double getEdgesNormalWidthRatio()
-    {
-        return _edgesNormalWidthRatio;
-    }
-    public void setEdgesNormalWidthRatio(double value)
-    {
-        _edgesNormalWidthRatio = value;
-        if (_graph != null)
-        {
-            updatePosition();
-        }
-    }
-
-    public double getEdgesSelectedWidthRatio()
-    {
-        return _edgesSelectedWidthRatio;
-    }
-    public void setEdgesSelectedWidthRatio(double value)
-    {
-        _edgesSelectedWidthRatio = value;
-        if (_graph != null)
-        {
-            updatePosition();
-        }
-    }
-
-    public double getEdgesNormalRadiusRatio()
-    {
-        return _edgesNormalRadiusRatio;
-    }
-    public void setEdgesNormalRadiusRatio(double value)
-    {
-        _edgesNormalRadiusRatio = value;
-        if (_graph != null)
-        {
-            updatePosition();
-        }
-    }
-
-    public double getEdgesSelectedRadiusRatio()
-    {
-        return _edgesSelectedRadiusRatio;
-    }
-    public void setEdgesSelectedRadiusRatio(double value) 
-    {
-        _edgesSelectedRadiusRatio = value;
-        if (_graph != null) 
+        this.margin = margin;
+        if (graph != null)
         {
             updatePosition();
         }
@@ -349,13 +240,13 @@ public class GraphDrawer extends AnchorPane
 
     public void reset()
     {
-        _vertices[_fromVertexNumber].setFill(Color.WHITE);
-        _fromVertexNumber = -1;
-        for (Integer vertex : _toVerticesNumbers)
+        vertices[fromVertexNumber].setFill(Color.WHITE);
+        fromVertexNumber = -1;
+        for (Integer vertex : toVerticesNumbers)
         {
-            _vertices[vertex].setFill(Color.WHITE);
+            vertices[vertex].setFill(Color.WHITE);
         }
-        _toVerticesNumbers = new ArrayList<>();
+        toVerticesNumbers = new ArrayList<>();
 
         unselectAllEdges();
         updatePosition();
@@ -369,121 +260,127 @@ public class GraphDrawer extends AnchorPane
 
     private void updatePosition()
     {
-        int rows = _graph.getRows();
-        int columns = _graph.getColumns();
-        int vertices_count = rows * columns;
+        final double verticesSpacingRatio = 0.5;
+        final double edgesSpacingRatio = 0.1;
+        final double edgesNormalWidthRatio = 0.05;
+        final double edgesSelectedWidthRatio = 0.15;
+        final double edgesNormalRadiusRatio = 0.1;
+        final double edgesSelectedRadiusRatio = 0.15;
 
-        double width = ((Pane)(this.getParent())).getWidth() - (_margin.getLeft() + _margin.getRight());
-        double height = ((Pane)(this.getParent())).getHeight() - (_margin.getTop() + _margin.getBottom());
+        int graphHeight = (int)graph.getSize().getHeight();
+        int graphWidth = (int)graph.getSize().getWidth();
+        int verticesCount = (int)graph.getSize().getArea();
 
-        double verticalDiameter = height / (((1 + _verticesSpacingRatio) * rows) - _verticesSpacingRatio);
-        double horizontalDiameter = width / (((1 + _verticesSpacingRatio) * columns) - _verticesSpacingRatio);
+        double paneWidth = ((Pane)(this.getParent())).getWidth() - (margin.getLeft() + margin.getRight());
+        double paneHeight = ((Pane)(this.getParent())).getHeight() - (margin.getTop() + margin.getBottom());
+
+        double verticalDiameter = paneHeight / (((1 + verticesSpacingRatio) * graphHeight) - verticesSpacingRatio);
+        double horizontalDiameter = paneWidth / (((1 + verticesSpacingRatio) * graphWidth) - verticesSpacingRatio);
         double diameter = Math.min(verticalDiameter, horizontalDiameter);
 
-        double x = diameter / 2 + _margin.getLeft();
-        double y = diameter / 2 + _margin.getTop();
-        for (int i = 0; i < vertices_count; i++)
+        double x = diameter / 2 + margin.getLeft();
+        double y = diameter / 2 + margin.getTop();
+        for (int i = 0; i < verticesCount; i++)
         {
-            _vertices[i].setCenterX(x);
-            _vertices[i].setCenterY(y);
-            _vertices[i].setRadius(diameter / 2);
+            vertices[i].setCenterX(x);
+            vertices[i].setCenterY(y);
+            vertices[i].setRadius(diameter / 2);
 
-            EdgesCollection baseVertexEdges = _baseEdges[i];
+            EdgesCollection baseVertexEdges = baseEdges[i];
             if (baseVertexEdges.getLeft() != null)
             {
                 Edge edge = baseVertexEdges.getLeft();
 
                 double startX = x - (diameter / 2);
-                double endX = startX - (diameter * _verticesSpacingRatio);
-                double Y = y + (_edgesSpacingRatio * diameter);
+                double endX = startX - (diameter * verticesSpacingRatio);
+                double Y = y + (edgesSpacingRatio * diameter);
 
                 edge.setStartX(startX);
                 edge.setStartY(Y);
                 edge.setEndX(endX);
                 edge.setEndY(Y);
-                edge.setLineWidth(diameter * _edgesNormalWidthRatio);
-                edge.setCircleRadius(diameter * _edgesNormalRadiusRatio);
+                edge.setLineWidth(diameter * edgesNormalWidthRatio);
+                edge.setCircleRadius(diameter * edgesNormalRadiusRatio);
             }
             if (baseVertexEdges.getRight() != null)
             {
                 Edge edge = baseVertexEdges.getRight();
 
                 double startX = x + (diameter / 2);
-                double endX = startX + (diameter * _verticesSpacingRatio);
-                double Y = y - (_edgesSpacingRatio * diameter);
+                double endX = startX + (diameter * verticesSpacingRatio);
+                double Y = y - (edgesSpacingRatio * diameter);
 
                 edge.setStartX(startX);
                 edge.setStartY(Y);
                 edge.setEndX(endX);
                 edge.setEndY(Y);
-                edge.setLineWidth(diameter * _edgesNormalWidthRatio);
-                edge.setCircleRadius(diameter * _edgesNormalRadiusRatio);
+                edge.setLineWidth(diameter * edgesNormalWidthRatio);
+                edge.setCircleRadius(diameter * edgesNormalRadiusRatio);
             }
             if (baseVertexEdges.getTop() != null)
             {
                 Edge edge = baseVertexEdges.getTop();
 
                 double startY = y - (diameter / 2);
-                double endY = startY - (diameter * _verticesSpacingRatio);
-                double X = x - (_edgesSpacingRatio * diameter);
+                double endY = startY - (diameter * verticesSpacingRatio);
+                double X = x - (edgesSpacingRatio * diameter);
 
                 edge.setStartX(X);
                 edge.setStartY(startY);
                 edge.setEndX(X);
                 edge.setEndY(endY);
-                edge.setLineWidth(diameter * _edgesNormalWidthRatio);
-                edge.setCircleRadius(diameter * _edgesNormalRadiusRatio);
+                edge.setLineWidth(diameter * edgesNormalWidthRatio);
+                edge.setCircleRadius(diameter * edgesNormalRadiusRatio);
             }
             if (baseVertexEdges.getBottom() != null)
             {
                 Edge edge = baseVertexEdges.getBottom();
 
                 double startY = y + (diameter / 2);
-                double endY = startY + (diameter * _verticesSpacingRatio);
-                double X = x + (_edgesSpacingRatio * diameter);
+                double endY = startY + (diameter * verticesSpacingRatio);
+                double X = x + (edgesSpacingRatio * diameter);
 
                 edge.setStartX(X);
                 edge.setStartY(startY);
                 edge.setEndX(X);
                 edge.setEndY(endY);
-                edge.setLineWidth(diameter * _edgesNormalWidthRatio);
-                edge.setCircleRadius(diameter * _edgesNormalRadiusRatio);
+                edge.setLineWidth(diameter * edgesNormalWidthRatio);
+                edge.setCircleRadius(diameter * edgesNormalRadiusRatio);
             }
 
-            if (((i + 1) % columns) == 0)
+            if (((i + 1) % graphWidth) == 0)
             {
-                x = diameter / 2 + _margin.getLeft();
-                y += (1 + _verticesSpacingRatio) * diameter;
+                x = diameter / 2 + margin.getLeft();
+                y += (1 + verticesSpacingRatio) * diameter;
             }
             else
             {
-                x += (1 + _verticesSpacingRatio) * diameter;
+                x += (1 + verticesSpacingRatio) * diameter;
             }
         }
 
-        for (Edge edge : _dijkstraEdges)
+        for (Edge edge : selectedEdges)
         {
-            edge.setLineWidth(diameter * _edgesSelectedWidthRatio);
-            edge.setCircleRadius(diameter * _edgesSelectedRadiusRatio);
+            edge.setLineWidth(diameter * edgesSelectedWidthRatio);
+            edge.setCircleRadius(diameter * edgesSelectedRadiusRatio);
         }
     }
 
     private void updateDijkstra()
     {
         unselectAllEdges();
-        if (_fromVertexNumber != -1)
+        if (fromVertexNumber != -1)
         {
-            _graph.refresh();
-            for (Integer vertex: _toVerticesNumbers)
+            for (Integer vertex: toVerticesNumbers)
             {
-                _dijkstra.dijkstraAlgorithm(_fromVertexNumber, vertex);
-                Vertex v = _graph.getVertex(vertex);
+                dijkstra.dijkstraAlgorithm(fromVertexNumber, vertex);
+                Vertex v = graph.getVertex(vertex);
                 while (v.getP() != -1)
                 {
-                    Edge edge = _baseEdges[v.getP()].getByNumber(v.getNumber());
+                    Edge edge = baseEdges[v.getP()].getByNumber(v.getNumber());
                     edge.setFill(Color.WHITE);
-                    _dijkstraEdges.add(edge);
-                    v = _graph.getVertex(v.getP());
+                    selectedEdges.add(edge);
+                    v = graph.getVertex(v.getP());
                 }
             }
         }
@@ -492,13 +389,11 @@ public class GraphDrawer extends AnchorPane
 
     private void unselectAllEdges()
     {
-        int rows = _graph.getRows();
-        int columns = _graph.getColumns();
-        int vertices_count = rows * columns;
-        for (int i = 0; i < vertices_count; i++)
+        int verticesCount = (int)graph.getSize().getArea();
+        for (int i = 0; i < verticesCount; i++)
         {
-            Vertex vertex = _graph.getVertex(i);
-            EdgesCollection edges = _baseEdges[i];
+            Vertex vertex = graph.getVertex(i);
+            EdgesCollection edges = baseEdges[i];
             if (edges.getLeft() != null)
             {
                 edges.getLeft().setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getLeftNumber()))));
@@ -516,12 +411,12 @@ public class GraphDrawer extends AnchorPane
                 edges.getBottom().setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getBottomNumber()))));
             }
         }
-        _dijkstraEdges.clear();
+        selectedEdges.clear();
     }
 
     private Color getEdgeColorByWeight(double weight)
     {
-        return Color.web("hsl(" + (255 - (((weight - _minGraphsWeight) / (_maxGraphsWeight - _minGraphsWeight)) * 255)) + ", 100%, 100%)");
+        return Color.web("hsl(" + (255 - (((weight - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)");
     }
 
     //endregion
@@ -533,90 +428,90 @@ public class GraphDrawer extends AnchorPane
     private class EdgesCollection
     {
         // PROPERTIES
-        private Edge _left = null;
-        private int _leftNumber = -1;
-        private Edge _right = null;
-        private int _rightNumber = -1;
-        private Edge _top = null;
-        private int _topNumber = -1;
-        private Edge _bottom = null;
-        private int _bottomNumber = -1;
+        private Edge left = null;
+        private int leftNumber = -1;
+        private Edge right = null;
+        private int rightNumber = -1;
+        private Edge top = null;
+        private int topNumber = -1;
+        private Edge bottom = null;
+        private int bottomNumber = -1;
 
 
         // PUBLIC METHODS
         public void setLeft(int number, Edge edge)
         {
-            _leftNumber = number;
-            _left = edge;
+            leftNumber = number;
+            left = edge;
         }
         public Edge getLeft()
         {
-            return _left;
+            return left;
         }
         public int getLeftNumber()
         {
-            return _leftNumber;
+            return leftNumber;
         }
 
         public void setRight(int number, Edge edge)
         {
-            _rightNumber = number;
-            _right = edge;
+            rightNumber = number;
+            right = edge;
         }
         public Edge getRight()
         {
-            return _right;
+            return right;
         }
         public int getRightNumber()
         {
-            return _rightNumber;
+            return rightNumber;
         }
 
         public void setTop(int number, Edge edge)
         {
-            _topNumber = number;
-            _top = edge;
+            topNumber = number;
+            top = edge;
         }
         public Edge getTop()
         {
-            return _top;
+            return top;
         }
         public int getTopNumber()
         {
-            return _topNumber;
+            return topNumber;
         }
 
         public void setBottom(int number, Edge edge)
         {
-            _bottomNumber = number;
-            _bottom = edge;
+            bottomNumber = number;
+            bottom = edge;
         }
         public Edge getBottom()
         {
-            return _bottom;
+            return bottom;
         }
         public int getBottomNumber()
         {
-            return _bottomNumber;
+            return bottomNumber;
         }
 
         public Edge getByNumber(int number)
         {
-            if (_leftNumber == number)
+            if (leftNumber == number)
             {
-                return _left;
+                return left;
             }
-            else if (_rightNumber == number)
+            else if (rightNumber == number)
             {
-                return _right;
+                return right;
             }
-            else if (_topNumber == number)
+            else if (topNumber == number)
             {
-                return _top;
+                return top;
             }
-            else if (_bottomNumber == number)
+            else if (bottomNumber == number)
             {
-                return _bottom;
+                return bottom;
             }
             else
             {
@@ -627,21 +522,21 @@ public class GraphDrawer extends AnchorPane
         public ArrayList<Edge> getAllEdges()
         {
             ArrayList<Edge> list = new ArrayList<>();
-            if (_left != null)
+            if (left != null)
             {
-                list.add(_left);
+                list.add(left);
             }
-            if (_right != null)
+            if (right != null)
             {
-                list.add(_right);
+                list.add(right);
             }
-            if (_top != null)
+            if (top != null)
             {
-                list.add(_top);
+                list.add(top);
             }
-            if (_bottom != null)
+            if (bottom != null)
             {
-                list.add(_bottom);
+                list.add(bottom);
             }
             return list;
         }
@@ -650,8 +545,8 @@ public class GraphDrawer extends AnchorPane
     private class Edge extends Group
     {
         // PROPERTIES
-        private final Line _line;
-        private final Circle _circle;
+        private final Line line;
+        private final Circle circle;
 
 
         // CONSTRUCTORS
@@ -663,8 +558,8 @@ public class GraphDrawer extends AnchorPane
         private Edge(Line line, Circle circle)
         {
             super(line, circle);
-            this._line = line;
-            this._circle = circle;
+            this.line = line;
+            this.circle = circle;
             circle.setRadius(3);
             InvalidationListener updater = o ->
             {
@@ -692,82 +587,82 @@ public class GraphDrawer extends AnchorPane
         // PUBLIC METHODS
         public final void setStartX(double value)
         {
-            _line.setStartX(value);
+            line.setStartX(value);
         }
         public final double getStartX()
         {
-            return _line.getStartX();
+            return line.getStartX();
         }
         public final DoubleProperty startXProperty()
         {
-            return _line.startXProperty();
+            return line.startXProperty();
         }
 
         public final void setStartY(double value)
         {
-            _line.setStartY(value);
+            line.setStartY(value);
         }
         public final double getStartY()
         {
-            return _line.getStartY();
+            return line.getStartY();
         }
         public final DoubleProperty startYProperty()
         {
-            return _line.startYProperty();
+            return line.startYProperty();
         }
 
         public final void setEndX(double value)
         {
-            _line.setEndX(value);
+            line.setEndX(value);
         }
         public final double getEndX()
         {
-            return _line.getEndX();
+            return line.getEndX();
         }
         public final DoubleProperty endXProperty()
         {
-            return _line.endXProperty();
+            return line.endXProperty();
         }
 
         public final void setEndY(double value)
         {
-            _line.setEndY(value);
+            line.setEndY(value);
         }
         public final double getEndY()
         {
-            return _line.getEndY();
+            return line.getEndY();
         }
         public final DoubleProperty endYProperty()
         {
-            return _line.endYProperty();
+            return line.endYProperty();
         }
 
         public final void setFill(Paint color)
         {
-            _line.setStroke(color);
-            _circle.setFill(color);
+            line.setStroke(color);
+            circle.setFill(color);
         }
         public final Paint getFill()
         {
-            return _line.getStroke();
+            return line.getStroke();
         }
 
         public final void setLineWidth(double width)
         {
-            _line.setStrokeWidth(width);
+            line.setStrokeWidth(width);
         }
         public final double getLineWidth()
         {
-            return _line.getStrokeWidth();
+            return line.getStrokeWidth();
         }
 
         public final void setCircleRadius(double radius)
         {
-            _circle.setRadius(radius);
+            circle.setRadius(radius);
         }
         public final double getCircleRadius()
         {
-            return _circle.getRadius();
+            return circle.getRadius();
         }
     }
 

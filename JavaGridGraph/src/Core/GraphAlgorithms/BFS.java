@@ -9,8 +9,8 @@ public class BFS
 {
     //region PROPERTIES
 
-    private final Graph _graph;
-    private final Result[] _results;
+    private final Graph graph;
+    private final Result[] results;
 
     //endregion
 
@@ -20,9 +20,9 @@ public class BFS
 
     public BFS(Graph graph)
     {
-        _graph = graph;
-        _results = new Result[_graph.getColumns() * _graph.getRows()];
-        Arrays.fill(_results, null);
+        this.graph = graph;
+        this.results = new Result[(int)graph.getSize().getArea()];
+        Arrays.fill(this.results, null);
     }
 
     //endregion
@@ -33,8 +33,8 @@ public class BFS
 
     public boolean isGraphConnected()
     {
-        Graph underlyingGraph = GraphUtils.convertToUnderlying(_graph);
-        for (boolean connectedVertex : run(0, underlyingGraph).Visited)
+        Graph underlyingGraph = GraphUtils.convertToUnderlying(graph);
+        for (boolean connectedVertex : run(0, underlyingGraph).visited)
         {
             if (!connectedVertex)
             {
@@ -52,11 +52,11 @@ public class BFS
 
     private Result run(int vertex)
     {
-        return run(vertex, _graph);
+        return run(vertex, graph);
     }
     private Result run(int vertex, Graph graph)
     {
-        int numberOfVertices = graph.getColumns() * graph.getRows();
+        int numberOfVertices = (int)graph.getSize().getArea();
 
         boolean[] visited = new boolean[numberOfVertices];
         int[] predecessors = new int[numberOfVertices];
@@ -102,18 +102,18 @@ public class BFS
     private class Result
     {
         // PROPERTIES
-        private final int Vertex;
-        private final boolean[] Visited;
-        private final int[] Predecessors;
-        private final int[] Distance;
+        private final int vertex;
+        private final boolean[] visited;
+        private final int[] predecessors;
+        private final int[] distance;
 
 
         // CONSTRUCTORS
         private Result(int vertex, boolean[] visited, int[] predecessors, int[] distance) {
-            Vertex = vertex;
-            Visited = visited;
-            Predecessors = predecessors;
-            Distance = distance;
+            this.vertex = vertex;
+            this.visited = visited;
+            this.predecessors = predecessors;
+            this.distance = distance;
         }
     }
 

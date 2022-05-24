@@ -26,8 +26,8 @@ public class MainStage extends Stage
 {
     //region PROPERTIES
 
-    private final GraphDrawer _graphDrawer;
-    private final Label _connectivityLabel;
+    private final GraphDrawer graphDrawer;
+    private final Label connectivityLabel;
 
     //endregion
 
@@ -45,9 +45,9 @@ public class MainStage extends Stage
         appbarPane.setPadding(new Insets(10));
         basePane.setTop(appbarPane);
 
-        _connectivityLabel = new Label("Connectivity: Unknown (Graph not loaded)");
-        _connectivityLabel.setAlignment(Pos.CENTER_LEFT);
-        appbarPane.setLeft(_connectivityLabel);
+        connectivityLabel = new Label("Connectivity: Unknown (Graph not loaded)");
+        connectivityLabel.setAlignment(Pos.CENTER_LEFT);
+        appbarPane.setLeft(connectivityLabel);
 
         HBox buttonsBox = new HBox(8);
         buttonsBox.setAlignment(Pos.CENTER_RIGHT);
@@ -68,9 +68,9 @@ public class MainStage extends Stage
         newGraphButton.setOnAction(new newGraphButtonClicked());
         buttonsBox.getChildren().add(newGraphButton);
 
-        _graphDrawer = new GraphDrawer();
-        _graphDrawer.setMargin(new Insets(10, 10, 55, 10));
-        basePane.setCenter(_graphDrawer);
+        graphDrawer = new GraphDrawer();
+        graphDrawer.setMargin(new Insets(10, 10, 55, 10));
+        basePane.setCenter(graphDrawer);
 
         this.setTitle("JavaGridGraph");
         this.setScene(scene);
@@ -86,15 +86,15 @@ public class MainStage extends Stage
     {
         if (graph != null)
         {
-            _graphDrawer.setGraph(graph);
+            graphDrawer.setGraph(graph);
             BFS bfs = new BFS(graph);
             if (bfs.isGraphConnected())
             {
-                _connectivityLabel.setText("Connectivity: Connected");
+                connectivityLabel.setText("Connectivity: Connected");
             }
             else
             {
-                _connectivityLabel.setText("Connectivity: Disconnected");
+                connectivityLabel.setText("Connectivity: Disconnected");
             }
         }
     }
@@ -136,9 +136,9 @@ public class MainStage extends Stage
         @Override
         public void handle(ActionEvent event)
         {
-            if (_graphDrawer.getGraph() != null)
+            if (graphDrawer.getGraph() != null)
             {
-                _graphDrawer.reset();
+                graphDrawer.reset();
             }
         }
     }

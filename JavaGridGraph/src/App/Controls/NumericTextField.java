@@ -8,10 +8,10 @@ public class NumericTextField extends TextField
 {
     //region PROPERTIES
 
-    private final Type _type;
+    private final Type type;
 
-    private double _minValue;
-    private double _maxValue;
+    private double minValue;
+    private double maxValue;
 
     //endregion
 
@@ -26,11 +26,11 @@ public class NumericTextField extends TextField
 
     public NumericTextField(Type type, String text)
     {
-        _type = type;
-        _minValue = Double.NaN;
-        _maxValue = Double.NaN;
+        this.type = type;
+        this.minValue = Double.NaN;
+        this.maxValue = Double.NaN;
 
-        this.textProperty().addListener(new textChanged());
+        this.textProperty().addListener(new TextChanged());
 
         this.setText(text);
     }
@@ -41,22 +41,22 @@ public class NumericTextField extends TextField
 
     //region PUBLIC METHODS
 
-    public void setMinValue(double value)
-    {
-        _minValue = value;
-    }
     public double getMinValue()
     {
-        return _minValue;
+        return minValue;
+    }
+    public void setMinValue(double value)
+    {
+        minValue = value;
     }
 
-    public void setMaxValue(double value)
-    {
-        _maxValue = value;
-    }
     public double getMaxValue()
     {
-        return _maxValue;
+        return maxValue;
+    }
+    public void setMaxValue(double value)
+    {
+        maxValue = value;
     }
 
     //endregion
@@ -65,13 +65,13 @@ public class NumericTextField extends TextField
 
     //region EVENT HANDLERS
 
-    private class textChanged implements ChangeListener<String>
+    private class TextChanged implements ChangeListener<String>
     {
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue)
         {
             String copyValue = newValue;
-            if (!copyValue.isEmpty() && copyValue.charAt(0) == '-' && (_type == Type.Integer || _type == Type.Double))
+            if (!copyValue.isEmpty() && copyValue.charAt(0) == '-' && (type == Type.Integer || type == Type.Double))
             {
                 copyValue = copyValue.substring(1);
             }
@@ -82,7 +82,7 @@ public class NumericTextField extends TextField
             {
                 if (text.charAt(i) == '.')
                 {
-                    if (dot || _type == Type.PositiveInteger)
+                    if (dot || type == Type.PositiveInteger)
                     {
                         text.deleteCharAt(i);
                     }
@@ -93,7 +93,7 @@ public class NumericTextField extends TextField
                 }
             }
             copyValue = text.toString();
-            if (!newValue.isEmpty() && newValue.charAt(0) == '-' && (_type == Type.Integer || _type == Type.Double))
+            if (!newValue.isEmpty() && newValue.charAt(0) == '-' && (type == Type.Integer || type == Type.Double))
             {
                 newValue = '-' + copyValue;
             }
@@ -102,12 +102,12 @@ public class NumericTextField extends TextField
                 newValue = copyValue;
             }
 
-            if ((!Double.isNaN(_minValue) || !Double.isNaN(_maxValue)) && !newValue.isEmpty())
+            if ((!Double.isNaN(minValue) || !Double.isNaN(maxValue)) && !newValue.isEmpty())
             {
-                if (_type == Type.PositiveDouble)
+                if (type == Type.PositiveDouble)
                 {
                     double value = Double.parseDouble(newValue);
-                    if (_minValue > value || _maxValue < value)
+                    if (minValue > value || maxValue < value)
                     {
                         newValue = oldValue;
                     }
@@ -115,7 +115,7 @@ public class NumericTextField extends TextField
                 else
                 {
                     int value = Integer.parseInt(newValue);
-                    if (_minValue > value || _maxValue < value)
+                    if (minValue > value || maxValue < value)
                     {
                         newValue = oldValue;
                     }

@@ -2,18 +2,34 @@ package Core;
 
 import java.util.ArrayList;
 
-public class Vertex {
+public class Vertex
+{
+    //region PROPERTIES
+
     private final int number;
     private double d; // distance from source vertex
     private int p; // predecessor in the shortest path
     private final ArrayList<Neighbour> neighbours;
 
-    public Vertex(int n) {
+    //endregion
+
+
+
+    //region CONSTRUCTORS
+
+    public Vertex(int n)
+    {
         this.number = n;
         this.d = Double.MAX_VALUE;
         this.p = -1;
         this.neighbours = new ArrayList<>();
     }
+
+    //endregion
+
+
+
+    //region PUBLIC METHODS
 
     public int getNumber() {
         return number;
@@ -39,8 +55,10 @@ public class Vertex {
         return neighbours.size();
     }
 
-    public int getNeighbourNumber(int i) {
-        if(i < 0 || i >= neighbours.size()) {
+    public int getNeighbourNumber(int i)
+    {
+        if(i < 0 || i >= neighbours.size())
+        {
             throw new IllegalArgumentException("Invalid index of neighbour");
         }
         return neighbours.get(i).n;
