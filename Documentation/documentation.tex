@@ -5,9 +5,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{indentfirst}
 \usepackage{hyperref}
-\usepackage{tikz}
-\usepackage{pgf-umlcd}
-\usepackage{tikz-among-us}
 \usepackage{graphicx}
 
 \graphicspath{ {./images/} }
@@ -173,23 +170,269 @@
     \newpage
     \chapter{Specyfikacja implementacyjna}
 
+
+
+
     \newpage
     \section{Diagram klas}
     \begin{center}
         \includegraphics[width=\textwidth]{uml.png}
     \end{center}
 
+
+
     \newpage
-    \section{Interfejs (Pakiet App)}
+    \section{Pakiet App (Interfejs)}
 
     Interfejs aplikacji został stworzony przy wykorzystaniu biblioteki JavaFX. Pakiet \textbf{App} składa się z dwóch podpakietów:
 
     \begin{itemize}
-        \item \textbf{Controls} zawierającym niestandardowe kontrolki
         \item \textbf{Stages} zawierającym widoki aplikacji
+        \item \textbf{Controls} zawierającym niestandardowe kontrolki
     \end{itemize}
 
+    \vspace{3em}
+
+
+    \subsection{App (App)}
+
+    Klasa App jest główną klasą całej aplikacji. Dziedziczy ona po klasie \console{Application} należącej do pakietu \console{javafx.application}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public void start(Stage primaryStage)} - Odpowiada za utworzenie głównego okna aplikacji (\console{MainStage}) i pokazanie go.
+        \item \console{public static void main(String[] args)} - Jest entry pointem i odpowiada za zainicjowanie aplikacji.
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{MainStage (App.Stages)}
+
+    Klasa MainStage jest odpowiedzialna za główne okno aplikacji. Dziedziczy ona po klasie \console{Stage} należącej do pakietu \console{javafx.stage}
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private final GraphDrawer graphDrawer}
+        \item \console{private final Label connectivityLabel}
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public MainStage()} - Główny konstruktor. W konstruktorze inicjowane jest okno (tworzone są kontrolki) i ustawiane są właściwości okna.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public void setGraph(Graph graph)} - Metoda odpowiedzialna za ustawienie grafu w kontrolce \console{graphDrawer} oraz sprawdzenie i wyświetlenie infromacji (w kontrolce \console{connectivityLabel}) o spójności grafu.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Obsługa zdarzeń:}
+
+    \begin{itemize}
+        \item \console{LoadGraphButtonClicked} - Obsługuje zdarzenie naciśnięcia przycisku ładowania grafu z pliku. Otwiera systemowe okno otwierania pliku. Po wybraniu pliku wywoływana jest metoda \console{setGraph}.
+        \item \console{ResetGraphDrawerButtonClicked} - Obsługuje zdarzenie naciśnięcia przycisku resetowania kontrolki wyświetlającej graf. Czyści zaznaczone ścieżki i wierzchołki (wywołuje metodę \console{graphDrawer.reset()}).
+        \item \console{NewGraphButtonClicked} - Obsługuje zdarzenie naciśnięcia przycisku tworzenia nowego grafu. Tworzy okno tworzenia grafu \console{NewGraphStage}, wyświetla je oraz wywołuje metodę \console{setGraph} dla zwróconego grafu.
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{NewGraphStage (App.Stages)}
+
+    Klasa NewGraphStage jest odpowiedzialna za okno tworzenia grafu. Dziedziczy ona po klasie \console{Stage} należącej do pakietu \console{javafx.stage}
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private Graph graph} - Graf który zostanie zwrócony w przypadku zamknięcia okna.
+        \item \console{private final NumericTextField widthField}
+        \item \console{private final NumericTextField heightField}
+        \item \console{private final NumericTextField minWeightField}
+        \item \console{private final NumericTextField maxWeightField}
+        \item \console{private final RadioButton directedGraphRadioButton}
+        \item \console{private final RadioButton notDirectedGraphRadioButton}
+        \item \console{private final Label outputEdgesLabel}
+        \item \console{private final NumericTextField minOutputEdgesField}
+        \item \console{private final NumericTextField maxOutputEdgesField}
+        \item \console{private final Label inputEdgesLabel}
+        \item \console{private final GridPane inputEdgesFieldPane}
+        \item \console{private final NumericTextField minInputEdgesField}
+        \item \console{private final NumericTextField maxInputEdgesField}
+        \item \console{private final NumericTextField customSeedField}
+        \item \console{private final CheckBox loadCheckBox}
+        \item \console{private final CheckBox saveToFileCheckBox}
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public NewGraphStage()} - Główny konstruktor. W konstruktorze inicjowane jest okno (tworzone są kontrolki) i ustawiane są właściwości okna.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public Graph showAndWaitForGraph()} - Metoda odpowiedzialna za wyświetlenie okna, a po jego zamknięciu - zwrócenie grafu.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Obsługa zdarzeń:}
+
+    \begin{itemize}
+        \item \console{GenerateButtonClicked} - Obsługuje zdarzenie naciśnięcia przycisku generowania grafu. Sprawdza podane parametry grafu, a następnie generuje graf. W przypadku gdy została wybrana opcja zapisu grafu w pliku (\console{saveToFileCheckBox}), otwiera systemowe okno zapisu pliku i zapisuje w nim wygenerowany graf. Na koniec zamyka okno.
+        \item \console{DirectedGraphRadioButtonToggleGroupToggleChanged} - Obsługuje zdarzenie zmiany zaznaczenia przycisków (RadioButton) "Directed" (\console{directedGraphRadioButton}) i "Not directed" (\console{notDirectedGraphRadioButton}).
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{GraphDrawer (App.Controls)}
+
+    Klasa GraphDrawer jest odpowiedzialna za kontrolkę wyświetlającą graf. Dziedziczy ona po klasie \console{AnchorPane} należącej do pakietu \console{javafx.scene.layout}
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private Graph graph} - Aktualnie ustawiony w kontrolce graf
+        \item \console{private Insets margin} - Margines kontrolki
+        \item \console{private Circle[] vertices} - Tablica zawierająca reprezentację wierzchołków
+        \item \console{private EdgesCollection[] baseEdges} - Tablica zawierająca kolekcję krawędzi wychodzących z wierzchołka o indeksie odpowiadającym indeksowi w tablicy
+        \item \console{private ArrayList<Edge> selectedEdges} - Lista zawierająca zaznaczone krawędzie.
+        \item \console{private Dijkstra dijkstra} - Algorytm Dijkstra dla aktualnie ustawionego grafu.
+        \item \console{private int fromVertexNumber} - Aktualnie zaznaczony wierzchołek "od" (zaznaczony na grafie kolorem czerwonym)
+        \item \console{private ArrayList<Integer> toVerticesNumbers} - Lista aktualnie zaznaczonych wierzchołków "do" (zaznaczone na grafie kolorem zielonym)
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public GraphDrawer()} - Główny konstruktor. W konstruktorze ustawiane są domyślne własciwości kontrolki.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public Graph getGraph()} - Metoda zwraca aktualnie ustawiony graf
+        \item \console{public void setGraph(Graph graph)} - Metoda ustawia podany graf w kontrolce.
+        \item \console{public Insets getMargin()} - Metoda zwraca margines kontrolki 
+        \item \console{public void setMargin(Insets margin)} - Metoda ustawia podany margine kontrolki.
+        \item \console{public void reset()} - Metoda czyści zaznaczenia wierzchołków i ścieżek
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Prywatne metody:}
+
+    \begin{itemize}
+        \item \console{public void updatePosition()} - Metoda uaktualnia pozycje wierzchołków i krawędzi.
+        \item \console{public void updateDijkstra()} - Metoda uaktualnia zaznaczone krawędzie
+        \item \console{public void unselectAllEdges()} - Metoda usuwa zaznaczenia ze wszystkich krawędzi.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Klasy zagnieżdzone:}
+
+    \begin{itemize}
+        \item \console{private class EdgesCollection} - Przechowuje reprezentacje krawędzi wychodzących z pojedyńćzego wierzchołka we wszystkich kierunkach.
+        \item \console{private class Edge extends Group} - Zespół kontrolek Circle i Line, będących reprezentacją krawędzi. Dziedziczy po klasie \console{Group} należącej do pakietu \console{javafx.scene}
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{NumericTextField (App.Controls)}
+
+    Klasa NumericTextField jest modyfikacją kontrolki \console{TextField} pozwalającą na wpisywanie tylko liczb. Dziedziczy ona po klasie \console{TextField} należącej do pakietu \console{javafx.scene.control}
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private final Type type} - Typ liczb wpisywanych w pole.
+        \item \console{private double minValue} - Dolny zakres liczb wpisywanych w pole.
+        \item \console{private double maxValue} - Górny zakres liczb wpisywanych w pole.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public NumericTextField(Type type)} - Konstruktor wywołujący główny konstruktor. Jako wartość początkową w polu ustawia pusty napis.
+        \item \console{public NumericTextField(Type type, String text)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public double getMinValue()} - Metoda zwraca dolny zakres liczb wpisywanych w pole
+        \item \console{public void setMinValue(double value)} - Metoda ustawia dolny zakres liczb wpisywanych w pole
+        \item \console{public double getMaxValue()} - Metoda zwraca górny zakres liczb wpisywanych w pole
+        \item \console{public void setMaxValue(double value)} - Metoda ustawia górny zakres liczb wpisywanych w pole
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Obsługa zdarzeń:}
+
+    \begin{itemize}
+        \item \console{TextChanged} - Obsługuje zdarzenie zmiany tekstu w polu. Sprawdza wprowadzoną liczbę pod kątem ustawionych własciwości kontrolki.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Wyliczenia:}
+
+    \begin{itemize}
+        \item \console{Type} - Typ wprowadzanych w kontrolce liczb
+    \end{itemize}
+
+    \vspace{2em}
+
+
+
     \newpage
-    \subsection{App}
+    \section{Pakiet Core}
+
+    Pakiet \textbf{Core} składa się z dwóch podpakietów:
+
+    \begin{itemize}
+        \item \textbf{GraphAlgorithms} zawierającym algorytmy grafowe
+        \item \textbf{Helpers} zawierającym klasy pomocnicze.
+    \end{itemize}
+
+    \vspace{3em}
 
 \end{document}

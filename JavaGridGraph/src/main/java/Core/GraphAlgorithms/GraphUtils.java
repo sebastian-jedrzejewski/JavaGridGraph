@@ -91,7 +91,6 @@ public class GraphUtils
             {
                 availableVertices.add(i + width);
             }
-            System.out.println();
             while (graph.getVertex(i).getNumberOfNeighbours() < outputEdgeCountArray[i] && availableVertices.size() > 0)
             {
                 int vertex = availableVertices.get(random.nextInt(availableVertices.size()));

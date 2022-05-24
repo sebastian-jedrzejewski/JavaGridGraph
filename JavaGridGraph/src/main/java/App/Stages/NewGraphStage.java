@@ -176,7 +176,7 @@ public class NewGraphStage extends Stage
         maxInputEdgesField.setMaxValue(4);
         inputEdgesFieldPane.add(maxInputEdgesField, 1 , 1);
 
-        directedGraphRadioButtonToggleGroup.selectedToggleProperty().addListener(new directedGraphRadioButtonToggleGroupToggleChanged());
+        directedGraphRadioButtonToggleGroup.selectedToggleProperty().addListener(new DirectedGraphRadioButtonToggleGroupToggleChanged());
 
         Separator separator3 = new Separator(Orientation.HORIZONTAL);
         labelFieldPane.add(separator3, 0, 8,2,1);
@@ -196,10 +196,11 @@ public class NewGraphStage extends Stage
         savingOptionsPane.getChildren().add(saveToFileCheckBox);
 
         loadCheckBox = new CheckBox("Load graph after generating");
+        loadCheckBox.setSelected(true);
         savingOptionsPane.getChildren().add(loadCheckBox);
 
         Button generateButton = new Button("Generate");
-        generateButton.setOnAction(new generateButtonClicked());
+        generateButton.setOnAction(new GenerateButtonClicked());
         BorderPane.setAlignment(generateButton, Pos.CENTER);
         BorderPane.setMargin(generateButton, new Insets(15, 0, 0, 0));
         basePane.setBottom(generateButton);
@@ -236,7 +237,7 @@ public class NewGraphStage extends Stage
 
     //region EVENT HANDLERS
 
-    private class generateButtonClicked implements EventHandler<ActionEvent>
+    private class GenerateButtonClicked implements EventHandler<ActionEvent>
     {
         @Override
         public void handle(ActionEvent event)
@@ -364,7 +365,7 @@ public class NewGraphStage extends Stage
         }
     }
 
-    private class directedGraphRadioButtonToggleGroupToggleChanged implements ChangeListener<Toggle>
+    private class DirectedGraphRadioButtonToggleGroupToggleChanged implements ChangeListener<Toggle>
     {
         @Override
         public void changed(ObservableValue<? extends Toggle> observableValue, Toggle oldValue, Toggle newValue)

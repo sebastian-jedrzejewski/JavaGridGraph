@@ -54,18 +54,18 @@ public class MainStage extends Stage
         appbarPane.setRight(buttonsBox);
 
         Button resetGraphDrawerButton = new Button("Reset");
-        resetGraphDrawerButton.setOnAction(new resetGraphDrawerButtonClicked());
+        resetGraphDrawerButton.setOnAction(new ResetGraphDrawerButtonClicked());
         buttonsBox.getChildren().add(resetGraphDrawerButton);
 
         Separator buttonsSeparator = new Separator(Orientation.VERTICAL);
         buttonsBox.getChildren().add(buttonsSeparator);
 
         Button loadGraphButton = new Button("Load");
-        loadGraphButton.setOnAction(new loadGraphButtonClicked());
+        loadGraphButton.setOnAction(new LoadGraphButtonClicked());
         buttonsBox.getChildren().add(loadGraphButton);
 
         Button newGraphButton = new Button("New");
-        newGraphButton.setOnAction(new newGraphButtonClicked());
+        newGraphButton.setOnAction(new NewGraphButtonClicked());
         buttonsBox.getChildren().add(newGraphButton);
 
         graphDrawer = new GraphDrawer();
@@ -105,7 +105,7 @@ public class MainStage extends Stage
 
     //region EVENT HANDLERS
 
-    private class loadGraphButtonClicked implements EventHandler<ActionEvent>
+    private class LoadGraphButtonClicked implements EventHandler<ActionEvent>
     {
         @Override
         public void handle(ActionEvent event)
@@ -131,7 +131,7 @@ public class MainStage extends Stage
         }
     }
 
-    private class resetGraphDrawerButtonClicked implements EventHandler<ActionEvent>
+    private class ResetGraphDrawerButtonClicked implements EventHandler<ActionEvent>
     {
         @Override
         public void handle(ActionEvent event)
@@ -143,7 +143,7 @@ public class MainStage extends Stage
         }
     }
 
-    private class newGraphButtonClicked implements EventHandler<ActionEvent>
+    private class NewGraphButtonClicked implements EventHandler<ActionEvent>
     {
         @Override
         public void handle(ActionEvent event)

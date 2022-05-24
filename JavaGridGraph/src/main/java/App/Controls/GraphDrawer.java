@@ -25,7 +25,6 @@ public class GraphDrawer extends AnchorPane
     //region PROPERTIES
 
     private Graph graph;
-    private Range graphWeightRange;
 
     private Insets margin;
 
@@ -60,7 +59,6 @@ public class GraphDrawer extends AnchorPane
         });
 
         this.graph = null;
-        this.graphWeightRange = null;
 
         this.margin = new Insets(0);
 
@@ -90,7 +88,6 @@ public class GraphDrawer extends AnchorPane
         if (graph != null)
         {
             this.graph = graph;
-            this.graphWeightRange = this.graph.getWeightRange();
             dijkstra = new Dijkstra(graph);
 
             int width = (int)graph.getSize().getWidth();
@@ -192,28 +189,29 @@ public class GraphDrawer extends AnchorPane
                 Vertex vertex = graph.getVertex(i);
                 baseEdges[vertexNumber] = new EdgesCollection();
                 int row = i / width;
+                Range graphWeightRange = graph.getWeightRange();
                 if (vertex.hasNeighbourNumber(i - 1) && (i - 1) / width == row)
                 {
                     Edge edge = new Edge();
-                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - 1))));
+                    edge.setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - 1)) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
                     baseEdges[vertexNumber].setLeft(i - 1, edge);
                 }
                 if (vertex.hasNeighbourNumber(i + 1) && (i + 1) / width == row)
                 {
                     Edge edge = new Edge();
-                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + 1))));
+                    edge.setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + 1)) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
                     baseEdges[vertexNumber].setRight(i + 1, edge);
                 }
                 if (vertex.hasNeighbourNumber(i - width))
                 {
                     Edge edge = new Edge();
-                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - width))));
+                    edge.setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(i - width)) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
                     baseEdges[vertexNumber].setTop(i - width, edge);
                 }
                 if (vertex.hasNeighbourNumber(i + width))
                 {
                     Edge edge = new Edge();
-                    edge.setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + width))));
+                    edge.setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(i + width)) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
                     baseEdges[vertexNumber].setBottom(i + width, edge);
                 }
             }
@@ -389,6 +387,7 @@ public class GraphDrawer extends AnchorPane
 
     private void unselectAllEdges()
     {
+        Range graphWeightRange = graph.getWeightRange();
         int verticesCount = (int)graph.getSize().getArea();
         for (int i = 0; i < verticesCount; i++)
         {
@@ -396,27 +395,22 @@ public class GraphDrawer extends AnchorPane
             EdgesCollection edges = baseEdges[i];
             if (edges.getLeft() != null)
             {
-                edges.getLeft().setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getLeftNumber()))));
+                edges.getLeft().setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getLeftNumber())) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
             }
             if (edges.getRight() != null)
             {
-                edges.getRight().setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getRightNumber()))));
+                edges.getRight().setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getRightNumber())) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
             }
             if (edges.getTop() != null)
             {
-                edges.getTop().setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getTopNumber()))));
+                edges.getTop().setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getTopNumber())) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
             }
             if (edges.getBottom() != null)
             {
-                edges.getBottom().setFill(getEdgeColorByWeight(vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getBottomNumber()))));
+                edges.getBottom().setFill(Color.web("hsl(" + (255 - (((vertex.getNeighbourWeight(vertex.getNeighbourIndex(edges.getBottomNumber())) - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)"));
             }
         }
         selectedEdges.clear();
-    }
-
-    private Color getEdgeColorByWeight(double weight)
-    {
-        return Color.web("hsl(" + (255 - (((weight - graphWeightRange.getLow()) / (graphWeightRange.getDifference())) * 255)) + ", 100%, 100%)");
     }
 
     //endregion
