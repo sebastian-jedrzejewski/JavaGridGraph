@@ -94,6 +94,12 @@ public class Vertex
         neighbours.add(new Neighbour(n, w));
     }
 
+    //endregion
+
+
+
+    //region NESTED CLASSES
+
     static class Neighbour {
         int n;
         double weight;
@@ -103,4 +109,6 @@ public class Vertex
             this.weight = w;
         }
     }
+
+    //endregion
 }

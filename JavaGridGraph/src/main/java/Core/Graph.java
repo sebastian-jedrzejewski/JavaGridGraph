@@ -21,15 +21,11 @@ public class Graph implements Iterable<Vertex>
     public Graph(Dimensions2D size)
     {
         this.size = size;
-        this.vertices = new Vertex[(int)this.size.getArea()];
-        for(int i = 0; i < (int)this.size.getArea(); i++)
+        this.vertices = new Vertex[(int) this.size.getArea()];
+        for (int i = 0; i < (int) this.size.getArea(); i++)
         {
             this.vertices[i] = new Vertex(i);
         }
-    }
-    public Graph(int height, int width)
-    {
-        this(new Dimensions2D(width, height));
     }
 
     //endregion

@@ -137,7 +137,7 @@ public class GraphUtils
             if(lineNumber == 0) {  // there should be dimensions
                 if(parts.length == 2) {
                     try {
-                        graph = new Graph(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                        graph = new Graph(new Dimensions2D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
                     } catch (NumberFormatException e) {
                         throw new IOException("Dimensions of the graph must be numbers");
                     }

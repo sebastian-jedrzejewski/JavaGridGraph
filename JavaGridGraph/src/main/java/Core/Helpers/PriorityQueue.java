@@ -86,6 +86,12 @@ public class PriorityQueue
         }
     }
 
+    //endregion
+
+
+
+    //region PRIVATE METHODS
+
     private void heapDown() {
         int i = 0;
         int c = 1;
@@ -111,4 +117,5 @@ public class PriorityQueue
         }
     }
 
+    //endregion
 }

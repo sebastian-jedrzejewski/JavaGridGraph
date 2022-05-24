@@ -419,8 +419,6 @@
         \item \console{Type} - Typ wprowadzanych w kontrolce liczb
     \end{itemize}
 
-    \vspace{2em}
-
 
 
     \newpage
@@ -434,5 +432,314 @@
     \end{itemize}
 
     \vspace{3em}
+
+
+    \subsection{Graph (Core)}
+
+    Klasa Graph jest odpowiedzialna za przechowywanie grafu siatkowego w formie listy sąsiedztwa. Implementuje ona interfejs \console{Iterable}.
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private final Dimensions2D size} - Rozmiar grafu.
+        \item \console{private final Vertex[] vertices} - Tablica wierzchołków.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public Graph(Dimensions2D size)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public Dimensions2D getSize()} - Metoda zwraca rozmiar grafu
+        \item \console{public Range getWeightRange()} - Metoda zwraca dolną i górną granicę (najmniejszą i największą wagę) wszystkich wag krawędzi.
+        \item \console{public int getNumberOfInputNeighbours(int number)} - Metoda zwraca liczbę krawędzi wchodzących do danego wierzchołka
+        \item \console{public int getVertex(int i)} - Metoda zwraca wierzchołek o podanym indeksie
+        \item \console{public int refresh()} - Metoda resetuje dla wszystkich wierzchołków dane wygenerowane przez algorytm Dijkstry
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{Graph (Core)}
+
+    Klasa Vertex jest odpowiedzialna za informacji o wierzchołku grafu.
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private final int number} - Numer wierzchołka.
+        \item \console{private double d} - Dystans od wierzchołka "od". Ustawiane przez algorytm Dijkstry.
+        \item \console{private int p} - Poprzednik wierzchołka. Ustawiane przez algorytm Dijkstry.
+        \item \console{private final ArrayList<Neighbour> neighbours} - Lista krawędzi wychodzących z wierzchołka (sąsiadów)
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public Vertex(int n)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public int getNumber()} - Metoda zwraca numer wierzchołka
+        \item \console{public double getD()} - Metoda zwraca dystans do wierzchołka "od"
+        \item \console{public int getP()} - Metoda zwraca numer poprzednika wierzchołka
+        \item \console{public void setD(double d)} - Metoda ustawia dystans do wierzchołka "od"
+        \item \console{public void setP(int p)} - Metoda ustawia numer poprzednika wierzchołka
+        \item \console{public int getNumberOfNeighbours()} - Metoda zwraca ilość krawędzi wychodzących z wierzchołka (sąsiadów)
+        \item \console{public int getNeighbourNumber(int i)} - Metoda zwraca numer sąsiada w grafie, na podstawie jego indeksu w tablicy sąsiadów
+        \item \console{public int getNeighbourIndex(int n)} - Metoda zwraca index sąsiada w tablicy sąsiadów, na podstawie jego numeru w grafie
+        \item \console{public double getNeighbourWeight(int i)} - Metoda zwraca wagę krawędzi połączonej z sąsiadem o podanym indeksie w tablicy sąsiadów
+        \item \console{public boolean hasNeighbourNumber(int n)} - Metoda zwraca wartość prawda/fałsz zapytania czy w tablcy sąsiadów znajduje się wierzchołek o podanym numerze w grafie
+        \item \console{public void addNeighbour(int n, double w)} - Metoda dodaje nowego sąsiada do tablicy sąsiadów
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Klasy zagnieżdzone:}
+
+    \begin{itemize}
+        \item \console{static class Neighbour} - Przechowuje informacje (numer sąsiada i wagę) o krawędzi
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{GraphUtils (Core.GraphAlgorithms)}
+
+    Klasa GraphUtils przechowuje metody pomocnicze dla grafów
+
+    \vspace{2em}
+
+    \textbf{Metody:}
+
+    \begin{itemize}
+        \item \console{public static Graph generate(Dimensions2D size, Random random, Range edgeWeight, Range edgeCount)} - Metoda wywołuje główną metodę \console{generate} z opcją generowania grafu nieskierowanego
+        \item \console{public static Graph generate(Dimensions2D size, Random random, Range edgeWeight, Range inputEdgeCount, Range outputEdgeCount)} - Metoda wywołuje główną metodę \console{generate} z opcją generowania grafu skierowanego
+        \item \console{private static Graph generate(Dimensions2D size, Random random, Range edgeWeight, Range inputEdgeCount, Range outputEdgeCount, boolean directed)} - Metoda generuje graf o podanych parametrach
+        \item \console{public static void write(Graph graph, File file)} - Metoda zapisuje graf w podanym pliku
+        \item \console{public static Graph read(File file)} - Metoda czyta graf z pliku
+        \item \console{public static Graph convertToUnderlying(Graph graph)} - Metoda generuje graf podstawowy podanego grafu.
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{BFS (Core.GraphAlgorithms)}
+
+    Klasa BFS jest odpowiedzialna za zarządzanie algorytmem BFS dla podanego grafu oraz za zwracanie własciwości grafu na podstawie algorytmu BFS.
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private final Graph graph} - Graf.
+        \item \console{private final Result[] results} - Wyniki działania algorytmu dla każdego wierzchołka grafu
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public BFS(Graph graph)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public boolean isGraphConnected()} - Metoda sprawdza czy graf jest spójny.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Prywatne metody:}
+
+    \begin{itemize}
+        \item \console{private Result run(int vertex)} - Metoda wywołuje algorytm BFS dla domyślnego grafu i podanego wierzchołka
+        \item \console{private Result run(int vertex, Graph graph)} - Metoda wywołuje algorytm BFS dla podanego grafu i podanego wierzchołka.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Klasy zagnieżdzone:}
+
+    \begin{itemize}
+        \item \console{private class Result} - Przechowuje wynik działąnia algorytmu BFS
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{Dijkstra (Core.GraphAlgorithms)}
+
+    Klasa Dijkstra jest odpowiedzialna za zarządzanie algorytmem Dijkstry dla podanego grafu.
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private final Graph graph} - Graf.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public Dijkstra(Graph graph)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{dijkstraAlgorithm(int vA, int vB)} - Metoda wywołuje algorytm Dijkstry dla pary wierzchołków
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{Dimensions2D (Core.Helpers)}
+
+    Klasa Dimensions2D jest odpowiedzialna za przechowywanie informacji o rozmiarze dwuwymiarowego prostokątnego elementu (w aplikacji używany głównie do przechowywania informacji o rozmiarze grafu).
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private double width} - Szerokość elementu
+        \item \console{private double height} - Wysokość elementu
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public Dimensions2D(double width, double height)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public double getWidth()} - Metoda zwraca szerokość elementu
+        \item \console{public void setWidth(double width)} - Metoda ustawia szerokość elementu
+        \item \console{public double getHeight()} - Metoda zwraca wysokość elementu
+        \item \console{public void setHeight(double height)} - Metoda ustawia wysokość elementu
+        \item \console{public double getArea()} - Metoda zwraca pole powierzchni elementu
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{Range (Core.Helpers)}
+
+    Klasa Range jest odpowiedzialna za przechowywanie informacji o zakresie wartości
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private double low} - Dolny zakres
+        \item \console{private double high} - Górny zakres
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public Range(double low, double high)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public double getLow()} - Metoda zwraca dolny zakres
+        \item \console{public void setLow(double low)} - Metoda ustawia dolny zakres
+        \item \console{public double getHigh()} - Metoda zwraca górny zakres
+        \item \console{public void setHigh(double high)} - Metoda ustawia górny zakres
+        \item \console{public double getDifference()} - Metoda zwraca różnicę między wartością maksymalną, a minimalną
+    \end{itemize}
+
+    \vspace{2em}
+
+
+    \subsection{PriorityQueue (Core.Helpers)}
+
+    Klasa PriorityQueue jest implementacją kolejki priorytetowej dla wierzchołków (\console{Vertex})
+
+    \vspace{2em}
+
+    \textbf{Właściwości:}
+
+    \begin{itemize}
+        \item \console{private final Vertex[] q} - Tablica wierzchołków
+        \item \console{private final int [] pn} - Pozycja wierzchołków w tablicy
+        \item \console{private int n} - Liczba wierzchołków w tablicy
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Konstruktory:}
+
+    \begin{itemize}
+        \item \console{public PriorityQueue(int n)} - Główny konstruktor.
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Publiczne metody:}
+
+    \begin{itemize}
+        \item \console{public int getPosition(int i)} - Metoda zwraca pozycję wierzchołka w tablicy
+        \item \console{public boolean isEmpty()} - Metoda sprawdza czy tablica jest pusta (true/false)
+        \item \console{public void push(Vertex v)} - Metoda dodaje element do kolejki
+        \item \console{public Vertex pop()} - Metoda wyciąga element z kolejki
+        \item \console{public void heapUp(int from)} - Przesiewanie w górę
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Prywatne metody:}
+
+    \begin{itemize}
+        \item \console{private void heapDown()} - Przesiewanie w dół
+    \end{itemize}
+
+
+
+
+    \newpage
+    \chapter{Testy}
 
 \end{document}
