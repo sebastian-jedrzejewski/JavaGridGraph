@@ -156,6 +156,9 @@ public class GraphUtils
                             if (parts[i + 1].contains(":")) { // delete ":" in weights
                                 parts[i + 1] = parts[i + 1].replace(":", "");
                             }
+                            if (parts[i + 1].contains(",")) {
+                                parts[i + 1] = parts[i + 1].replace(",", ".");
+                            }
                             double weight = Double.parseDouble(parts[i + 1]);
                             v.addNeighbour(vertex, weight);
                         } catch(NumberFormatException e) {
