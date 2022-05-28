@@ -741,5 +741,86 @@
 
     \newpage
     \chapter{Testy}
+	
+	\newpage
+	\section{Testy klasy GraphUtils}
+	
+	Klasa \console{GraphUtils} została przetestowana pod kątem poprawności generowania oraz czytania grafu.
+	
+	\vspace{2em}
+	
+	\subsection{Generowanie dwóch grafów 500x500 ze stałym ziarnem generatora liczb losowych}
+	
+	Test polega na wygenerowaniu dwóch grafów nieskierowanych o rozmiarach 500 na 500, 
+	z ziarnem generatora równym 0 i z domyślnymi parametrami oraz zapisaniu ich odpowiednio do plików „test1.txt” i „test2.txt”. 
+	Następnie sprawdzane jest czy oba pliki mają tę samą zawartość, tzn. 250002 linii każdy. 
+	W pierwszej linii powinny być zapisane rozmiary grafu, 250000 następnych zawiera listy sąsiedztwa, 
+	a ostatnia jest pusta. Na końcu sprawdzana jest też zgodność tych plików z oczekiwanym grafem zapisanym w pliku „expectedTest1.txt”.
+	Wyniki testów znajdują się w folderze \console{testResults}.
+	
+	\vspace{2em}
+	
+	\subsection{Czytanie wygenerowanego grafu}
+	
+	Test polega na czytaniu grafu wygenerowanego w poprzednim teście, który znajduje się w pliku ,,test1.txt” w folderze \console{testResults}.
+	Następnie przeczytany graf jest zapisywany do nowego pliku o nazwie „test3.txt”. 
+	Powinien on być taki sam jak dwa poprzednio wygenerowane grafy i ten oczekiwany. 
+	Na końcu porównywana jest zawartość nowopowstałego pliku z oczekiwanym.
+	
+	\newpage
+	\section{Testy klasy BFS}
+	
+	W klasie \console{BFS} przetestowana została poprawność algorytmu BFS sprawdzającego spójność zarówno grafów skierowanych, jak i nieskierowanych.
+	
+	\vspace{2em}
+	
+	\subsection{Generowanie i sprawdzenie spójności grafu nieskierowanego na pewno niespójnego (granica liczby krawędzi od 0 do 1)}
+	
+	Test polega na wygenerowaniu grafu nieskierowanego, który na pewno jest niespójny oraz sprawdzeniu jego spójności algorytmem BFS.
+	W tym teście metoda \console{isGraphConnected} obiektu klasy \console{BFS} powinna zwrócić \console{false}, aby test zakończył się pomyślnie.
+	
+	\vspace{2em}
+	
+	\subsection{Generowanie i sprawdzenie spójności grafu nieskierowanego na pewno spójnego (granica liczby krawędzi od 4 do 4)}
+	
+	Test polega na wygenerowaniu grafu nieskierowanego, który na pewno jest spójny oraz sprawdzeniu jego spójności algorytmem BFS. 
+	W tym teście metoda \console{isGraphConnected} obiektu klasy \console{BFS} powinna zwrócić \console{true}, aby test zakończył się pomyślnie.
+	
+	\vspace{2em}
+	
+	\subsection{Generowanie i sprawdzenie spójności grafu skierowanego na pewno niespójnego (granica liczby krawędzi wchodzących i wychodzących od 0 do 1)}
+	
+	Test polega na wygenerowaniu grafu skierowanego, który na pewno jest niespójny oraz sprawdzeniu jego spójności algorytmem BFS, który najpierw przekształci ten graf na podstawowy.
+	W tym teście metoda \console{isGraphConnected} obiektu klasy \console{BFS} powinna zwrócić \console{false}, aby test zakończył się pomyślnie.
+	
+	\vspace{2em}
+	
+	\subsection{Generowanie i sprawdzenie spójności grafu skierowanego na pewno spójnego (granica liczby krawędzi wchodzących i wychodzących od 4 do 4)}
+	
+	Test polega na wygenerowaniu grafu skierowanego, który na pewno jest spójny oraz sprawdzeniu jego spójności algorytmem BFS, który najpierw przekształci ten graf na podstawowy. 
+	W tym teście metoda \console{isGraphConnected} obiektu klasy \console{BFS} powinna zwrócić \console{true}, aby test zakończył się pomyślnie.
+	
+	\newpage
+	\section{Test klasy PriorityQueue}
+	
+	Test klasy PriorityQueue polega na sprawdzeniu poprawności działania kolejki priorytetowej.
+	Sprawdzenie to odbywa się poprzez włożenie do kolejki priorytetowej 1000 wierzchołków o losowej odległości od wierzchołka źródłowego 
+	(odległość ta to priorytet), przy czym jest ona losowana od 0 do 1. Powinny one być włożone w ten sposób,
+	żeby na początku kolejki znajdował się wierzchołek o najmniejszej odległości. 
+	
+	Następnie odbywa się wyjmowanie wierzchołków i reorganizacja kolejki tak, 
+	aby wierzchołek o największym priorytecie był na jej początku. 
+	Sprawdzane jest czy odległość wierzchołka zdjętego z kolejki jest mniejsza od odległości wierzchołka wcześniej zdjętego.
+	Jeżeli dla każdego zdjętego wierzchołka jest to spełnione, to kolejka działa poprawnie i test jest zakończony pomyślnie.
+	
+	\vspace{2em}
+	\section{Wyniki testów}
+	
+	Wszystkie powyższe testy zostały napisane w oparciu o bibliotekę \console{JUnit4}. Ich uruchomienie powoduje automatyczne sprawdzenie, czy zakończyły się one pomyślnie.
+	Napisane testy udanie przeszły tę próbę:
+	
+	\begin{center}
+        \includegraphics[width=\textwidth]{test_results.png}
+    \end{center}
 
 \end{document}
