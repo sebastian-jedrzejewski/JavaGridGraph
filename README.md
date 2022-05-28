@@ -1,5 +1,5 @@
 # JavaGridGraph
 
 Autorzy:
-Jędrzejewski Sebastian
-Skoczek Mateusz
+- Jędrzejewski Sebastian
+- Skoczek Mateusz
