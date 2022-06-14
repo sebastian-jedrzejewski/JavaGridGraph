@@ -4,10 +4,15 @@ import core.Graph;
 import core.helpers.PriorityQueue;
 import core.Vertex;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Dijkstra
 {
     //region PROPERTIES
     private final Graph graph;
+    private final List<Double> d;
+    private final List<Integer> p;
 
     //endregion
 
@@ -18,6 +23,8 @@ public class Dijkstra
     public Dijkstra(Graph graph)
     {
         this.graph = graph;
+        this.p = new ArrayList<>((int) this.graph.getSize().getArea());
+        this.d = new ArrayList<>((int) this.graph.getSize().getArea());
     }
 
     //endregion
@@ -26,9 +33,9 @@ public class Dijkstra
 
     //region PUBLIC METHODS
 
-    public void dijkstraAlgorithm(int vA, int vB)
+    public List<Integer> dijkstraAlgorithm(int vA, int vB)
     {
-        graph.refresh();
+        arraysRefresh();
 
         Vertex vertexA = graph.getVertex(vA);
         Vertex vertexB = graph.getVertex(vB);
@@ -37,37 +44,59 @@ public class Dijkstra
         PriorityQueue pq = new PriorityQueue(n);
         for(int i = 0; i < n; i++)
         {
-            pq.push(graph.getVertex(i));
+            pq.push(graph.getVertex(i), d);
         }
 
-        vertexA.setD(0);
+        d.set(vertexA.getNumber(), 0.0);
 
         // Keeping heap properties
-        pq.heapUp(pq.getPosition(vA));
+        pq.heapUp(pq.getPosition(vA), d);
 
         Vertex u, v;
         while(!pq.isEmpty())
         {
-            u = pq.pop();
+            u = pq.pop(d);
 
             // loop for each neighbour v of vertex u
             for(int i=0; i < u.getNumberOfNeighbours(); i++)
             {
                 v = graph.getVertex(u.getNeighbourNumber(i));
-                if(v.getD() > u.getD() + u.getNeighbourWeight(i))
+                if(d.get(v.getNumber()) > d.get(u.getNumber()) + u.getNeighbourWeight(i))
                 {
-                    v.setD(u.getD() + u.getNeighbourWeight(i));
-                    v.setP(u.getNumber());
-                    pq.heapUp(pq.getPosition(v.getNumber()));
+                    d.set(v.getNumber(), d.get(u.getNumber()) + u.getNeighbourWeight(i));
+                    p.set(v.getNumber(), u.getNumber());
+                    pq.heapUp(pq.getPosition(v.getNumber()), d);
                 }
 
                 if(u.getNumber() == vertexB.getNumber())
                 {
-                    return;
+                     return p;
                 }
             }
         }
+        return p;
     }
+
+
+    //endregion
+
+
+    //region PRIVATE METHODS
+
+
+    private void arraysRefresh() {
+        if(d.size() != 0) {
+            d.removeAll(d);
+        }
+        if(p.size() != 0) {
+            p.removeAll(p);
+        }
+        for(int i=0; i < (int) graph.getSize().getArea(); i++) {
+            d.add(Double.MAX_VALUE);
+            p.add(-1);
+        }
+    }
+
 
     //endregion
 }

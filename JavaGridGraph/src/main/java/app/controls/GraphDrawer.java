@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GraphDrawer extends AnchorPane
 {
@@ -366,19 +367,20 @@ public class GraphDrawer extends AnchorPane
 
     private void updateDijkstra()
     {
+        List<Integer> p;
         unselectAllEdges();
         if (fromVertexNumber != -1)
         {
             for (Integer vertex: toVerticesNumbers)
             {
-                dijkstra.dijkstraAlgorithm(fromVertexNumber, vertex);
+                p = dijkstra.dijkstraAlgorithm(fromVertexNumber, vertex);
                 Vertex v = graph.getVertex(vertex);
-                while (v.getP() != -1)
+                while (p.get(v.getNumber()) != -1)
                 {
-                    Edge edge = baseEdges[v.getP()].getByNumber(v.getNumber());
+                    Edge edge = baseEdges[p.get(v.getNumber())].getByNumber(v.getNumber());
                     edge.setFill(Color.WHITE);
                     selectedEdges.add(edge);
-                    v = graph.getVertex(v.getP());
+                    v = graph.getVertex(p.get(v.getNumber()));
                 }
             }
         }

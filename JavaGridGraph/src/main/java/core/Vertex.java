@@ -7,8 +7,6 @@ public class Vertex
     //region PROPERTIES
 
     private final int number;
-    private double d; // distance from source vertex
-    private int p; // predecessor in the shortest path
     private final ArrayList<Neighbour> neighbours;
 
     //endregion
@@ -20,8 +18,6 @@ public class Vertex
     public Vertex(int n)
     {
         this.number = n;
-        this.d = Double.MAX_VALUE;
-        this.p = -1;
         this.neighbours = new ArrayList<>();
     }
 
@@ -33,22 +29,6 @@ public class Vertex
 
     public int getNumber() {
         return number;
-    }
-
-    public double getD() {
-        return d;
-    }
-
-    public int getP() {
-        return p;
-    }
-
-    public void setD(double d) {
-        this.d = d;
-    }
-
-    public void setP(int p) {
-        this.p = p;
     }
 
     public int getNumberOfNeighbours() {

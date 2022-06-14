@@ -85,13 +85,6 @@ public class Graph implements Iterable<Vertex>
         return vertices[i];
     }
 
-    public void refresh() {
-        for(int i=0; i < size.getArea(); i++) {
-            vertices[i].setP(-1);
-            vertices[i].setD(Double.MAX_VALUE);
-        }
-    }
-
     //endregion
 
 

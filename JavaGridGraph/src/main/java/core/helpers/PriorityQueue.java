@@ -2,6 +2,8 @@ package core.helpers;
 
 import core.Vertex;
 
+import java.util.List;
+
 public class PriorityQueue
 {
     //region PROPERTIES
@@ -43,7 +45,7 @@ public class PriorityQueue
         return n == 0;
     }
 
-    public void push(Vertex v)
+    public void push(Vertex v, List<Double> d)
     {
         // q.length is also max size of priority queue because it is the number of vertices in graph, which is constant
         if(n == q.length)
@@ -53,25 +55,25 @@ public class PriorityQueue
 
         q[n++] = v;
         pn[v.getNumber()] = n-1;
-        heapUp(n-1);
+        heapUp(n-1, d);
     }
 
-    public Vertex pop()
+    public Vertex pop(List<Double> d)
     {
         Vertex v = q[0];
         pn[q[0].getNumber()] = -1;
         pn[q[n-1].getNumber()] = 0;
         q[0] = q[--n];
-        heapDown();
+        heapDown(d);
         return v;
     }
 
-    public void heapUp(int from) {
+    public void heapUp(int from, List<Double> d) {
         int i = from;
         int p = (from - 1) / 2;
         Vertex tmp;
         while (i > 0) {
-            if(q[p].getD() <= q[i].getD()) {
+            if(d.get(q[p].getNumber()) <= d.get(q[i].getNumber())) {
                 break;
             }
 
@@ -92,17 +94,17 @@ public class PriorityQueue
 
     //region PRIVATE METHODS
 
-    private void heapDown() {
+    private void heapDown(List<Double> d) {
         int i = 0;
         int c = 1;
         Vertex tmp;
 
         while(c < n) {
-            if(c + 1 < n && q[c + 1].getD() < q[c].getD()) {
+            if(c + 1 < n && d.get(q[c + 1].getNumber()) < d.get(q[c].getNumber())) {
                 c++;
             }
 
-            if(q[i].getD() <= q[c].getD()) {
+            if(d.get(q[i].getNumber()) <= d.get(q[c].getNumber())) {
                 break;
             }
 
