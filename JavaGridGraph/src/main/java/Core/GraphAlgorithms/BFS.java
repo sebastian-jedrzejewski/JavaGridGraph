@@ -1,7 +1,7 @@
-package Core.GraphAlgorithms;
+package core.graphalgorithms;
 
-import Core.Graph;
-import Core.Vertex;
+import core.Graph;
+import core.Vertex;
 
 import java.util.*;
 

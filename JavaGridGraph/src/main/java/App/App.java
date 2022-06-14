@@ -1,6 +1,6 @@
-package App;
+package app;
 
-import App.Stages.MainStage;
+import app.stages.MainStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

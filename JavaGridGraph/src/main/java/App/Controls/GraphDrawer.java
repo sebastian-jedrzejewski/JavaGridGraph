@@ -1,9 +1,9 @@
-package App.Controls;
+package app.controls;
 
-import Core.Graph;
-import Core.GraphAlgorithms.Dijkstra;
-import Core.Helpers.Range;
-import Core.Vertex;
+import core.Graph;
+import core.graphalgorithms.Dijkstra;
+import core.helpers.Range;
+import core.Vertex;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;

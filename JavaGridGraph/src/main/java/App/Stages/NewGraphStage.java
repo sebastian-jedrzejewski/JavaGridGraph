@@ -1,10 +1,10 @@
-package App.Stages;
+package app.stages;
 
-import App.Controls.NumericTextField;
-import Core.Graph;
-import Core.Helpers.Dimensions2D;
-import Core.Helpers.Range;
-import Core.GraphAlgorithms.GraphUtils;
+import app.controls.NumericTextField;
+import core.graph;
+import core.helpers.Dimensions2D;
+import core.helpers.Range;
+import core.graphalgorithms.GraphUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.Size;

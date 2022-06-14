@@ -1,7 +1,7 @@
-package Core;
+package core;
 
-import Core.Helpers.Dimensions2D;
-import Core.Helpers.Range;
+import core.helpers.Dimensions2D;
+import core.helpers.Range;
 
 import java.util.Iterator;
 

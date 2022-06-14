@@ -1,6 +1,6 @@
-package Core.Helpers;
+package core.helpers;
 
-import Core.Vertex;
+import core.Vertex;
 
 public class PriorityQueue
 {

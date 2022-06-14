@@ -1,9 +1,9 @@
-package App.Stages;
+package app.stages;
 
-import App.Controls.GraphDrawer;
-import Core.Graph;
-import Core.GraphAlgorithms.BFS;
-import Core.GraphAlgorithms.GraphUtils;
+import app.controls.GraphDrawer;
+import core.graph;
+import core.graphalgorithms.BFS;
+import core.graphalgorithms.GraphUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

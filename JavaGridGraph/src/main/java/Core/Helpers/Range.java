@@ -1,4 +1,4 @@
-package Core.Helpers;
+package core.helpers;
 
 public class Range
 {

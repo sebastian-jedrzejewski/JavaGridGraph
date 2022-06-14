@@ -1,9 +1,9 @@
-package Core.GraphAlgorithms;
+package core.graphalgorithms;
 
-import Core.Graph;
-import Core.Helpers.Dimensions2D;
-import Core.Helpers.Range;
-import Core.Vertex;
+import core.Graph;
+import core.helpers.Dimensions2D;
+import core.helpers.Range;
+import core.Vertex;
 
 import java.io.*;
 import java.util.ArrayList;
