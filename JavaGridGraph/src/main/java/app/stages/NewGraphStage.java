@@ -1,7 +1,7 @@
 package app.stages;
 
 import app.controls.NumericTextField;
-import core.graph;
+import core.Graph;
 import core.helpers.Dimensions2D;
 import core.helpers.Range;
 import core.graphalgorithms.GraphUtils;

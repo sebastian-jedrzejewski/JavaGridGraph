@@ -1,7 +1,7 @@
 package app.stages;
 
 import app.controls.GraphDrawer;
-import core.graph;
+import core.Graph;
 import core.graphalgorithms.BFS;
 import core.graphalgorithms.GraphUtils;
 import javafx.event.ActionEvent;
