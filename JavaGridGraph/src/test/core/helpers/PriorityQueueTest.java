@@ -1,6 +1,6 @@
-package Core.Helpers;
+package core.helpers;
 
-import Core.Vertex;
+import core.Vertex;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

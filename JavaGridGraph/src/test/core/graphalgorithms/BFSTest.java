@@ -1,8 +1,8 @@
-package Core.GraphAlgorithms;
+package core.graphalgorithms;
 
-import Core.Graph;
-import Core.Helpers.Dimensions2D;
-import Core.Helpers.Range;
+import core.Graph;
+import core.helpers.Dimensions2D;
+import core.helpers.Range;
 import org.junit.Test;
 
 import java.util.Random;
