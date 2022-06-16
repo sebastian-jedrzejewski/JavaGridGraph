@@ -464,13 +464,12 @@
         \item \console{public Range getWeightRange()} - Metoda zwraca dolną i górną granicę (najmniejszą i największą wagę) wszystkich wag krawędzi.
         \item \console{public int getNumberOfInputNeighbours(int number)} - Metoda zwraca liczbę krawędzi wchodzących do danego wierzchołka
         \item \console{public int getVertex(int i)} - Metoda zwraca wierzchołek o podanym indeksie
-        \item \console{public int refresh()} - Metoda resetuje dla wszystkich wierzchołków dane wygenerowane przez algorytm Dijkstry
     \end{itemize}
 
     \vspace{2em}
 
 
-    \subsection{Graph (Core)}
+    \subsection{Vertex (Core)}
 
     Klasa Vertex jest odpowiedzialna za informacji o wierzchołku grafu.
 
@@ -480,8 +479,6 @@
 
     \begin{itemize}
         \item \console{private final int number} - Numer wierzchołka.
-        \item \console{private double d} - Dystans od wierzchołka "od". Ustawiane przez algorytm Dijkstry.
-        \item \console{private int p} - Poprzednik wierzchołka. Ustawiane przez algorytm Dijkstry.
         \item \console{private final ArrayList<Neighbour> neighbours} - Lista krawędzi wychodzących z wierzchołka (sąsiadów)
     \end{itemize}
 
@@ -499,10 +496,6 @@
 
     \begin{itemize}
         \item \console{public int getNumber()} - Metoda zwraca numer wierzchołka
-        \item \console{public double getD()} - Metoda zwraca dystans do wierzchołka "od"
-        \item \console{public int getP()} - Metoda zwraca numer poprzednika wierzchołka
-        \item \console{public void setD(double d)} - Metoda ustawia dystans do wierzchołka "od"
-        \item \console{public void setP(int p)} - Metoda ustawia numer poprzednika wierzchołka
         \item \console{public int getNumberOfNeighbours()} - Metoda zwraca ilość krawędzi wychodzących z wierzchołka (sąsiadów)
         \item \console{public int getNeighbourNumber(int i)} - Metoda zwraca numer sąsiada w grafie, na podstawie jego indeksu w tablicy sąsiadów
         \item \console{public int getNeighbourIndex(int n)} - Metoda zwraca index sąsiada w tablicy sąsiadów, na podstawie jego numeru w grafie
@@ -601,6 +594,8 @@
 
     \begin{itemize}
         \item \console{private final Graph graph} - Graf.
+        \item \console{private final List<Double> d}
+        \item \console{private final List<Integer> p}
     \end{itemize}
 
     \vspace{2em}
@@ -617,6 +612,14 @@
 
     \begin{itemize}
         \item \console{dijkstraAlgorithm(int vA, int vB)} - Metoda wywołuje algorytm Dijkstry dla pary wierzchołków
+    \end{itemize}
+
+    \vspace{2em}
+
+    \textbf{Prywatne metody:}
+
+    \begin{itemize}
+        \item \console{arraysRefresh()} - Metoda resetuje zawartość list
     \end{itemize}
 
     \vspace{2em}
@@ -723,9 +726,9 @@
     \begin{itemize}
         \item \console{public int getPosition(int i)} - Metoda zwraca pozycję wierzchołka w tablicy
         \item \console{public boolean isEmpty()} - Metoda sprawdza czy tablica jest pusta (true/false)
-        \item \console{public void push(Vertex v)} - Metoda dodaje element do kolejki
-        \item \console{public Vertex pop()} - Metoda wyciąga element z kolejki
-        \item \console{public void heapUp(int from)} - Przesiewanie w górę
+        \item \console{public void push(Vertex v, List<Double> d)} - Metoda dodaje element do kolejki
+        \item \console{public Vertex pop(List<Double> d)} - Metoda wyciąga element z kolejki
+        \item \console{public void heapUp(int from, List<Double> d)} - Przesiewanie w górę
     \end{itemize}
 
     \vspace{2em}
@@ -733,7 +736,7 @@
     \textbf{Prywatne metody:}
 
     \begin{itemize}
-        \item \console{private void heapDown()} - Przesiewanie w dół
+        \item \console{private void heapDown(List<Double> d)} - Przesiewanie w dół
     \end{itemize}
 
 
